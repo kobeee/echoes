@@ -1,5 +1,59 @@
 # Echoes 项目变更日志
 
+## 2026-02-12 - 设计闭环 v4.0（16页→20页，9条流程全部闭环）
+
+### 设计系统建立
+- [新增] 31 个设计变量 Token（颜色 19 + 圆角 5 + 间距 5 + 数值 2）
+- [新增] 颜色体系：bg-primary/secondary/tertiary、gold-100~700、teal/purple/red-500、text-primary/secondary/muted/gold、border-default/gold、bg-emergency/pro
+- [新增] 圆角体系：radius-xs(2)/sm(4)/md(12)/lg(22)/full(9999)
+- [新增] 间距体系：spacing-xs(4)/sm(8)/md(16)/lg(24)/xl(32)
+
+### TabBar 一致性修复
+- [修复] My Footprints TabBar 中间按钮：裸 ellipse(56px) → frame(44px) 包裹 ellipse(40px)+text
+- [修复] Empty Map TabBar 中间按钮：同上
+- [修复] Settings TabBar 中间按钮：同上，并补充缺失的 "+" 号
+- [修复] Settings TabBar 位置：y:935 → y:769（标准视口位置）
+
+### 视觉对齐修复
+- [修复] Settings 页面高度：1020pt → 852pt，压缩间距使所有内容在 TabBar 上方可见
+- [修复] Black Box 计时器容器：扩大至 160×130，修复文字溢出
+- [修复] Drop View 波形容器：高度 120 → 145，修复高波形条裁切
+- [修复] My Footprints header：高度 100 → 115，修复标题裁切
+- [修复] Pickup View：距离数字居中、Echo 卡片改为垂直布局
+- [修复] Widget Medium 迷你雷达：改为绝对定位，修复元素溢出排成一行
+- [修复] Live Activity 迷你雷达：同上
+
+### 新增页面（+4 页）
+- [新增] **Echo Discovered** (`5866p`) — 发现回响通知状态，金色边框通知卡片，Pickup 流程入口
+- [新增] **Recovery Key** (`jiWqm`) — P0 安全关键，Key 展示/复制、红色安全警告、双按钮
+- [新增] **Time Lock Locked** (`T8Nkm`) — P0 核心付费点，🔒 锁定图标+光晕、倒计时 1,460 天、设置提醒
+- [新增] **Pro Subscription** (`mJ8dW`) — P1 商业化落地，三大功能卡片、订阅按钮、恢复购买
+
+### 文档输出
+- [新增] `docs/design/ui/design-closure-v4.0.md` — 设计闭环方案，20 页清单+流程验证+设计规范
+- [新增] `docs/design/ui/product-flow-audit.md` — 产品流程审计，9 条流程分析+缺口识别+补全建议
+- [更新] `CLAUDE.md` / `IFLOW.md` — 项目状态同步至 v2.0
+
+### 关键数据
+- **页面总数**: 16 → 20（+4 页）
+- **设计变量**: 0 → 31 个 Token
+- **流程闭环**: 6/9 → 9/9（全部闭环）
+- **PRD 覆盖度**: 78 → 92 分
+- **总体完成度**: ~85% → ~97%
+
+---
+
+## 2026-02-12 - 产品流程审计与缺口分析
+- [新增] `docs/design/ui/product-flow-audit.md` — 产品流程审计与缺口分析文档
+  - 基于 PRD v1.0 逐一审计 9 条用户流程的闭环状态
+  - 6 条流程完全闭环，3 条流程存在缺口
+  - 识别出 2 个缺失的独立页面：Recovery Key 管理页、Pro 订阅详情页
+  - 识别出 4 个缺失的页面内状态变体：时间锁未到期、足迹空状态、文字便签模式、Recovery Key 提醒
+  - 当前 PRD 覆盖度综合评分：78/100
+  - 补全后预计可达 92/100
+
+---
+
 ## 2026-02-11 - Tab Bar 中间按钮修复
 
 ### Tab Bar 重新设计

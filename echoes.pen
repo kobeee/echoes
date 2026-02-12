@@ -632,33 +632,265 @@
           "y": 200,
           "name": "dvWave",
           "width": 300,
-          "height": 120,
+          "height": 145,
           "layout": "none",
           "children": [
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb1", "x": 8, "y": 70, "fill": "#B89A4A", "opacity": 0.5, "width": 4, "height": 20},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb2", "x": 20, "y": 60, "fill": "#D4AA40", "opacity": 0.7, "width": 4, "height": 40},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb3", "x": 32, "y": 45, "fill": "#E0BE5C", "opacity": 0.9, "width": 4, "height": 70},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb4", "x": 44, "y": 35, "fill": "#EAD07A", "width": 4, "height": 90},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb5", "x": 56, "y": 25, "fill": "#D4AA40", "width": 4, "height": 110},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb6", "x": 68, "y": 30, "fill": "#E0BE5C", "width": 4, "height": 100},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb7", "x": 80, "y": 40, "fill": "#D4AA40", "opacity": 0.9, "width": 4, "height": 80},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb8", "x": 92, "y": 55, "fill": "#B89A4A", "opacity": 0.7, "width": 4, "height": 50},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb9", "x": 104, "y": 65, "fill": "#B89A4A", "opacity": 0.6, "width": 4, "height": 30},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb10", "x": 116, "y": 50, "fill": "#D4AA40", "opacity": 0.8, "width": 4, "height": 60},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb11", "x": 128, "y": 35, "fill": "#E0BE5C", "width": 4, "height": 90},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb12", "x": 140, "y": 20, "fill": "#EAD07A", "width": 4, "height": 120},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb13", "x": 152, "y": 30, "fill": "#E0BE5C", "width": 4, "height": 100},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb14", "x": 164, "y": 45, "fill": "#D4AA40", "opacity": 0.9, "width": 4, "height": 70},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb15", "x": 176, "y": 60, "fill": "#B89A4A", "opacity": 0.7, "width": 4, "height": 40},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb16", "x": 188, "y": 70, "fill": "#B89A4A", "opacity": 0.5, "width": 4, "height": 20},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb17", "x": 200, "y": 55, "fill": "#D4AA40", "opacity": 0.8, "width": 4, "height": 50},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb18", "x": 212, "y": 35, "fill": "#E0BE5C", "width": 4, "height": 90},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb19", "x": 224, "y": 25, "fill": "#D4AA40", "width": 4, "height": 110},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb20", "x": 236, "y": 40, "fill": "#EAD07A", "opacity": 0.9, "width": 4, "height": 80},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb21", "x": 248, "y": 60, "fill": "#D4AA40", "opacity": 0.7, "width": 4, "height": 40},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb22", "x": 260, "y": 70, "fill": "#B89A4A", "opacity": 0.6, "width": 4, "height": 20},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb23", "x": 272, "y": 50, "fill": "#D4AA40", "opacity": 0.8, "width": 4, "height": 60},
-            {"type": "rectangle", "cornerRadius": 2, "id": "wb24", "x": 284, "y": 65, "fill": "#B89A4A", "opacity": 0.7, "width": 4, "height": 30}
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb1",
+              "x": 8,
+              "y": 70,
+              "opacity": 0.5,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 20
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb2",
+              "x": 20,
+              "y": 60,
+              "opacity": 0.7,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 40
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb3",
+              "x": 32,
+              "y": 45,
+              "opacity": 0.9,
+              "fill": "#E0BE5C",
+              "width": 4,
+              "height": 70
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb4",
+              "x": 44,
+              "y": 35,
+              "fill": "#EAD07A",
+              "width": 4,
+              "height": 90
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb5",
+              "x": 56,
+              "y": 25,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 110
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb6",
+              "x": 68,
+              "y": 30,
+              "fill": "#E0BE5C",
+              "width": 4,
+              "height": 100
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb7",
+              "x": 80,
+              "y": 40,
+              "opacity": 0.9,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 80
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb8",
+              "x": 92,
+              "y": 55,
+              "opacity": 0.7,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 50
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb9",
+              "x": 104,
+              "y": 65,
+              "opacity": 0.6,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 30
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb10",
+              "x": 116,
+              "y": 50,
+              "opacity": 0.8,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 60
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb11",
+              "x": 128,
+              "y": 35,
+              "fill": "#E0BE5C",
+              "width": 4,
+              "height": 90
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb12",
+              "x": 140,
+              "y": 20,
+              "fill": "#EAD07A",
+              "width": 4,
+              "height": 120
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb13",
+              "x": 152,
+              "y": 30,
+              "fill": "#E0BE5C",
+              "width": 4,
+              "height": 100
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb14",
+              "x": 164,
+              "y": 45,
+              "opacity": 0.9,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 70
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb15",
+              "x": 176,
+              "y": 60,
+              "opacity": 0.7,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 40
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb16",
+              "x": 188,
+              "y": 70,
+              "opacity": 0.5,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 20
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb17",
+              "x": 200,
+              "y": 55,
+              "opacity": 0.8,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 50
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb18",
+              "x": 212,
+              "y": 35,
+              "fill": "#E0BE5C",
+              "width": 4,
+              "height": 90
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb19",
+              "x": 224,
+              "y": 25,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 110
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb20",
+              "x": 236,
+              "y": 40,
+              "opacity": 0.9,
+              "fill": "#EAD07A",
+              "width": 4,
+              "height": 80
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb21",
+              "x": 248,
+              "y": 60,
+              "opacity": 0.7,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 40
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb22",
+              "x": 260,
+              "y": 70,
+              "opacity": 0.6,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 20
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb23",
+              "x": 272,
+              "y": 50,
+              "opacity": 0.8,
+              "fill": "#D4AA40",
+              "width": 4,
+              "height": 60
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "wb24",
+              "x": 284,
+              "y": 65,
+              "opacity": 0.7,
+              "fill": "#B89A4A",
+              "width": 4,
+              "height": 30
+            }
           ]
         },
         {
@@ -850,7 +1082,7 @@
           "y": 0,
           "name": "sosHeader",
           "width": 393,
-          "height": 100,
+          "height": 120,
           "layout": "none",
           "children": [
             {
@@ -862,7 +1094,7 @@
               "fill": "#FF453A",
               "content": "⚠️ 紧急模式",
               "fontFamily": "-apple-system",
-              "fontSize": 24,
+              "fontSize": 22,
               "fontWeight": "bold"
             }
           ]
@@ -891,11 +1123,11 @@
         {
           "type": "frame",
           "id": "sosTimerFrame",
-          "x": 130,
+          "x": 116.5,
           "y": 320,
           "name": "sosTimerFrame",
-          "width": 133,
-          "height": 100,
+          "width": 160,
+          "height": 130,
           "fill": "transparent",
           "layout": "vertical",
           "justifyContent": "center",
@@ -1299,7 +1531,7 @@
         {
           "type": "text",
           "id": "X5UbO",
-          "x": 150,
+          "x": 164,
           "y": 500,
           "name": "pvDist",
           "fill": "#FFFFFF",
@@ -1390,7 +1622,7 @@
             {
               "type": "text",
               "id": "ysW9W",
-              "x": 120,
+              "x": 100,
               "y": 20,
               "name": "pvActionText",
               "fill": "#1A1400",
@@ -1404,8 +1636,8 @@
         {
           "type": "text",
           "id": "RBFCN",
-          "x": 210,
-          "y": 540,
+          "x": 220,
+          "y": 535,
           "name": "meterText",
           "fill": "#98989F",
           "content": "米",
@@ -1423,6 +1655,9 @@
           "height": 80,
           "fill": "#1C1C1E",
           "cornerRadius": 12,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 16,
           "children": [
             {
               "type": "text",
@@ -1449,7 +1684,7 @@
         {
           "type": "text",
           "id": "hM9ec",
-          "x": 178,
+          "x": 184,
           "y": 485,
           "name": "distLabel",
           "fill": "#98989F",
@@ -1478,14 +1713,14 @@
           "y": 0,
           "name": "fpHeader",
           "width": 393,
-          "height": 100,
+          "height": 115,
           "layout": "none",
           "children": [
             {
               "type": "text",
               "id": "1z1QF",
               "x": 20,
-              "y": 59,
+              "y": 62,
               "name": "fpTitle",
               "fill": "#FFFFFF",
               "content": "我的足迹",
@@ -1754,8 +1989,16 @@
           "width": 393,
           "height": 83,
           "fill": "rgba(28,28,30,0.72)",
-          "effect": {"type": "background_blur", "radius": 20},
-          "padding": [8, 0, 34, 0],
+          "effect": {
+            "type": "background_blur",
+            "radius": 20
+          },
+          "padding": [
+            8,
+            0,
+            34,
+            0
+          ],
           "justifyContent": "space_around",
           "alignItems": "center",
           "children": [
@@ -1770,8 +2013,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "fpHomeIcon", "name": "fpHomeIcon", "fill": "#98989F", "content": "🏠", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "fpHomeLabel", "name": "fpHomeLabel", "fill": "#98989F", "content": "首页", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "fpHomeIcon",
+                  "name": "fpHomeIcon",
+                  "fill": "#98989F",
+                  "content": "🏠",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "fpHomeLabel",
+                  "name": "fpHomeLabel",
+                  "fill": "#98989F",
+                  "content": "首页",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
@@ -1785,27 +2046,60 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "fpMapIcon", "name": "fpMapIcon", "fill": "#98989F", "content": "🗺", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "fpMapLabel", "name": "fpMapLabel", "fill": "#98989F", "content": "地图", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "fpMapIcon",
+                  "name": "fpMapIcon",
+                  "fill": "#98989F",
+                  "content": "🗺",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "fpMapLabel",
+                  "name": "fpMapLabel",
+                  "fill": "#98989F",
+                  "content": "地图",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
-              "type": "ellipse",
-              "id": "fpCenterBtn",
-              "name": "fpCenterBtn",
-              "fill": "#D4AA40",
-              "width": 56,
-              "height": 56
-            },
-            {
-              "type": "text",
-              "id": "fpCenterPlus",
-              "name": "fpCenterPlus",
-              "fill": "#FFFFFF",
-              "content": "+",
-              "fontFamily": "-apple-system",
-              "fontSize": 32,
-              "fontWeight": "300"
+              "type": "frame",
+              "id": "Modri",
+              "name": "fpCenterActionBtn",
+              "width": 44,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "fNwPm",
+                  "x": 2,
+                  "y": 2,
+                  "name": "fpCenterBg",
+                  "fill": "#D4AA40",
+                  "width": 40,
+                  "height": 40
+                },
+                {
+                  "type": "text",
+                  "id": "s9AqU",
+                  "x": 10,
+                  "y": 5,
+                  "name": "fpCenterPlusNew",
+                  "fill": "#FFFFFF",
+                  "content": "+",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 24,
+                  "fontWeight": "300"
+                }
+              ]
             },
             {
               "type": "frame",
@@ -1818,8 +2112,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "fpFootIcon", "name": "fpFootIcon", "fill": "#D4AA40", "content": "👣", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "fpFootLabel", "name": "fpFootLabel", "fill": "#D4AA40", "content": "足迹", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "fpFootIcon",
+                  "name": "fpFootIcon",
+                  "fill": "#D4AA40",
+                  "content": "👣",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "fpFootLabel",
+                  "name": "fpFootLabel",
+                  "fill": "#D4AA40",
+                  "content": "足迹",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
@@ -1833,8 +2145,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "fpSetIcon", "name": "fpSetIcon", "fill": "#98989F", "content": "⚙️", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "fpSetLabel", "name": "fpSetLabel", "fill": "#98989F", "content": "设置", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "fpSetIcon",
+                  "name": "fpSetIcon",
+                  "fill": "#98989F",
+                  "content": "⚙️",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "fpSetLabel",
+                  "name": "fpSetLabel",
+                  "fill": "#98989F",
+                  "content": "设置",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             }
           ]
@@ -1848,7 +2178,7 @@
       "y": 0,
       "name": "Settings",
       "width": 393,
-      "height": 1020,
+      "height": 852,
       "fill": "#000000",
       "layout": "none",
       "children": [
@@ -1892,10 +2222,10 @@
           "type": "frame",
           "id": "1ZiBM",
           "x": 24,
-          "y": 120,
+          "y": 110,
           "name": "stProfile",
           "width": 345,
-          "height": 100,
+          "height": 76,
           "fill": "#1C1C1E",
           "cornerRadius": 12,
           "layout": "none",
@@ -1904,7 +2234,7 @@
               "type": "ellipse",
               "id": "STJEQ",
               "x": 20,
-              "y": 20,
+              "y": 8,
               "name": "stAvatar",
               "fill": "#2C2C2E",
               "width": 60,
@@ -1914,7 +2244,7 @@
               "type": "text",
               "id": "wNxR4",
               "x": 100,
-              "y": 30,
+              "y": 18,
               "name": "stDevId",
               "fill": "#FFFFFF",
               "content": "Device ID: ****8273",
@@ -1926,7 +2256,7 @@
               "type": "text",
               "id": "F2Kiw",
               "x": 100,
-              "y": 54,
+              "y": 42,
               "name": "stKey",
               "fill": "#00BFA5",
               "content": "Recovery Key Available",
@@ -1940,10 +2270,10 @@
           "type": "frame",
           "id": "OHWon",
           "x": 24,
-          "y": 240,
+          "y": 196,
           "name": "stPro",
           "width": 345,
-          "height": 140,
+          "height": 96,
           "fill": "#2A2318",
           "cornerRadius": 12,
           "stroke": {
@@ -1956,19 +2286,19 @@
               "type": "text",
               "id": "W9xel",
               "x": 24,
-              "y": 24,
+              "y": 14,
               "name": "stProTitle",
               "fill": "#D4AA40",
               "content": "Echoes Pro",
               "fontFamily": "-apple-system",
-              "fontSize": 24,
+              "fontSize": 22,
               "fontWeight": "bold"
             },
             {
               "type": "text",
               "id": "P8u4K",
               "x": 24,
-              "y": 60,
+              "y": 40,
               "name": "stProDesc",
               "fill": "#EAD07A",
               "content": "解锁无限视频上传与专属光点",
@@ -1980,7 +2310,7 @@
               "type": "text",
               "id": "stPrice",
               "x": 260,
-              "y": 28,
+              "y": 14,
               "name": "stProPrice",
               "fill": "#D4AA40",
               "content": "¥12/月",
@@ -1992,7 +2322,7 @@
               "type": "text",
               "id": "stLearn",
               "x": 24,
-              "y": 105,
+              "y": 68,
               "name": "stProLearn",
               "fill": "#D4AA40",
               "content": "了解更多 >",
@@ -2006,7 +2336,7 @@
           "type": "text",
           "id": "stPrivHeader",
           "x": 24,
-          "y": 400,
+          "y": 302,
           "name": "stPrivacyHeader",
           "fill": "#98989F",
           "content": "隐私",
@@ -2018,7 +2348,7 @@
           "type": "frame",
           "id": "stPrivGroup",
           "x": 24,
-          "y": 425,
+          "y": 318,
           "name": "stPrivacyGroup",
           "width": 345,
           "height": 132,
@@ -2125,7 +2455,7 @@
           "type": "text",
           "id": "stNotifHeader",
           "x": 24,
-          "y": 575,
+          "y": 460,
           "name": "stNotifHeader",
           "fill": "#98989F",
           "content": "通知",
@@ -2137,7 +2467,7 @@
           "type": "frame",
           "id": "stNotifGroup",
           "x": 24,
-          "y": 600,
+          "y": 474,
           "name": "stNotifGroup",
           "width": 345,
           "height": 88,
@@ -2209,7 +2539,7 @@
           "type": "text",
           "id": "stAboutHeader",
           "x": 24,
-          "y": 708,
+          "y": 572,
           "name": "stAboutHeader",
           "fill": "#98989F",
           "content": "关于",
@@ -2221,10 +2551,10 @@
           "type": "frame",
           "id": "stAboutGroup",
           "x": 24,
-          "y": 733,
+          "y": 588,
           "name": "stAboutGroup",
           "width": 345,
-          "height": 176,
+          "height": 170,
           "fill": "#1C1C1E",
           "cornerRadius": 12,
           "layout": "none",
@@ -2367,7 +2697,7 @@
           "type": "frame",
           "id": "stTabBar",
           "x": 0,
-          "y": 935,
+          "y": 769,
           "name": "stTabBar",
           "width": 393,
           "height": 83,
@@ -2376,7 +2706,12 @@
             "type": "background_blur",
             "radius": 20
           },
-          "padding": [8, 0, 34, 0],
+          "padding": [
+            8,
+            0,
+            34,
+            0
+          ],
           "justifyContent": "space_around",
           "alignItems": "center",
           "children": [
@@ -2447,12 +2782,37 @@
               ]
             },
             {
-              "type": "ellipse",
-              "id": "stCenterBtn",
-              "name": "stCenterBtn",
-              "fill": "#D4AA40",
-              "width": 56,
-              "height": 56
+              "type": "frame",
+              "id": "Ecik2",
+              "name": "stCenterActionBtn",
+              "width": 44,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "G8Jsj",
+                  "x": 2,
+                  "y": 2,
+                  "name": "stCenterBg",
+                  "fill": "#D4AA40",
+                  "width": 40,
+                  "height": 40
+                },
+                {
+                  "type": "text",
+                  "id": "McEvW",
+                  "x": 10,
+                  "y": 5,
+                  "name": "stCenterPlusNew",
+                  "fill": "#FFFFFF",
+                  "content": "+",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 24,
+                  "fontWeight": "300"
+                }
+              ]
             },
             {
               "type": "frame",
@@ -2759,11 +3119,15 @@
           "height": 120,
           "fill": "#000000",
           "cornerRadius": 12,
+          "layout": "none",
           "children": [
             {
               "type": "ellipse",
               "id": "NqQVv",
+              "x": 10,
+              "y": 10,
               "name": "mwCircle1",
+              "opacity": 0.3,
               "fill": "transparent",
               "width": 100,
               "height": 100,
@@ -2775,7 +3139,10 @@
             {
               "type": "ellipse",
               "id": "l4vlH",
+              "x": 35,
+              "y": 35,
               "name": "mwCircle2",
+              "opacity": 0.2,
               "fill": "transparent",
               "width": 50,
               "height": 50,
@@ -2787,6 +3154,8 @@
             {
               "type": "ellipse",
               "id": "M758N",
+              "x": 56,
+              "y": 56,
               "name": "mwUserDot",
               "fill": "#00BFA5",
               "width": 8,
@@ -2795,6 +3164,8 @@
             {
               "type": "ellipse",
               "id": "LbAWb",
+              "x": 75,
+              "y": 35,
               "name": "mwEchoDot",
               "fill": "#D4AA40",
               "width": 6,
@@ -3526,7 +3897,10 @@
           "fill": "transparent",
           "width": 500,
           "height": 500,
-          "stroke": {"thickness": 1, "fill": "#007A68"}
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
         },
         {
           "type": "ellipse",
@@ -3538,7 +3912,10 @@
           "fill": "transparent",
           "width": 300,
           "height": 300,
-          "stroke": {"thickness": 1, "fill": "#007A68"}
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
         },
         {
           "type": "ellipse",
@@ -3550,7 +3927,10 @@
           "fill": "transparent",
           "width": 100,
           "height": 100,
-          "stroke": {"thickness": 1, "fill": "#007A68"}
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
         },
         {
           "type": "ellipse",
@@ -3622,8 +4002,16 @@
           "width": 393,
           "height": 83,
           "fill": "rgba(28,28,30,0.72)",
-          "effect": {"type": "background_blur", "radius": 20},
-          "padding": [8, 0, 34, 0],
+          "effect": {
+            "type": "background_blur",
+            "radius": 20
+          },
+          "padding": [
+            8,
+            0,
+            34,
+            0
+          ],
           "justifyContent": "space_around",
           "alignItems": "center",
           "children": [
@@ -3638,8 +4026,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "emHomeIcon", "name": "emHomeIcon", "fill": "#98989F", "content": "🏠", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "emHomeLabel", "name": "emHomeLabel", "fill": "#98989F", "content": "首页", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "emHomeIcon",
+                  "name": "emHomeIcon",
+                  "fill": "#98989F",
+                  "content": "🏠",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "emHomeLabel",
+                  "name": "emHomeLabel",
+                  "fill": "#98989F",
+                  "content": "首页",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
@@ -3653,27 +4059,60 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "emMapIcon", "name": "emMapIcon", "fill": "#D4AA40", "content": "🗺", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "emMapLabel", "name": "emMapLabel", "fill": "#D4AA40", "content": "地图", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "emMapIcon",
+                  "name": "emMapIcon",
+                  "fill": "#D4AA40",
+                  "content": "🗺",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "emMapLabel",
+                  "name": "emMapLabel",
+                  "fill": "#D4AA40",
+                  "content": "地图",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
-              "type": "ellipse",
-              "id": "emCenterBtn",
-              "name": "emCenterBtn",
-              "fill": "#D4AA40",
-              "width": 56,
-              "height": 56
-            },
-            {
-              "type": "text",
-              "id": "emCenterPlus",
-              "name": "emCenterPlus",
-              "fill": "#FFFFFF",
-              "content": "+",
-              "fontFamily": "-apple-system",
-              "fontSize": 32,
-              "fontWeight": "300"
+              "type": "frame",
+              "id": "JGBz2",
+              "name": "emCenterActionBtn",
+              "width": 44,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "aeDLd",
+                  "x": 2,
+                  "y": 2,
+                  "name": "emCenterBg",
+                  "fill": "#D4AA40",
+                  "width": 40,
+                  "height": 40
+                },
+                {
+                  "type": "text",
+                  "id": "mWUIl",
+                  "x": 10,
+                  "y": 5,
+                  "name": "emCenterPlusNew",
+                  "fill": "#FFFFFF",
+                  "content": "+",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 24,
+                  "fontWeight": "300"
+                }
+              ]
             },
             {
               "type": "frame",
@@ -3686,8 +4125,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "emFootIcon", "name": "emFootIcon", "fill": "#98989F", "content": "👣", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "emFootLabel", "name": "emFootLabel", "fill": "#98989F", "content": "足迹", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "emFootIcon",
+                  "name": "emFootIcon",
+                  "fill": "#98989F",
+                  "content": "👣",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "emFootLabel",
+                  "name": "emFootLabel",
+                  "fill": "#98989F",
+                  "content": "足迹",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             },
             {
@@ -3701,8 +4158,26 @@
               "justifyContent": "center",
               "alignItems": "center",
               "children": [
-                {"type": "text", "id": "emSetIcon", "name": "emSetIcon", "fill": "#98989F", "content": "⚙️", "fontFamily": "-apple-system", "fontSize": 22, "fontWeight": "normal"},
-                {"type": "text", "id": "emSetLabel", "name": "emSetLabel", "fill": "#98989F", "content": "设置", "fontFamily": "-apple-system", "fontSize": 11, "fontWeight": "normal"}
+                {
+                  "type": "text",
+                  "id": "emSetIcon",
+                  "name": "emSetIcon",
+                  "fill": "#98989F",
+                  "content": "⚙️",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "emSetLabel",
+                  "name": "emSetLabel",
+                  "fill": "#98989F",
+                  "content": "设置",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
               ]
             }
           ]
@@ -3743,28 +4218,43 @@
           "height": 80,
           "fill": "#000000",
           "cornerRadius": 12,
+          "layout": "none",
           "children": [
             {
               "type": "ellipse",
               "id": "laCircle1",
+              "x": 5,
+              "y": 5,
               "name": "laCircle1",
+              "opacity": 0.3,
               "fill": "transparent",
               "width": 70,
               "height": 70,
-              "stroke": {"thickness": 1, "fill": "#007A68"}
+              "stroke": {
+                "thickness": 1,
+                "fill": "#007A68"
+              }
             },
             {
               "type": "ellipse",
               "id": "laCircle2",
+              "x": 20,
+              "y": 20,
               "name": "laCircle2",
+              "opacity": 0.2,
               "fill": "transparent",
               "width": 40,
               "height": 40,
-              "stroke": {"thickness": 1, "fill": "#007A68"}
+              "stroke": {
+                "thickness": 1,
+                "fill": "#007A68"
+              }
             },
             {
               "type": "ellipse",
               "id": "laUserDot",
+              "x": 36,
+              "y": 36,
               "name": "laUserDot",
               "fill": "#00BFA5",
               "width": 8,
@@ -3773,9 +4263,9 @@
             {
               "type": "ellipse",
               "id": "laEchoDot",
+              "x": 55,
+              "y": 25,
               "name": "laEchoDot",
-              "x": 20,
-              "y": -10,
               "fill": "#D4AA40",
               "width": 6,
               "height": 6
@@ -3829,11 +4319,46 @@
           "gap": 3,
           "alignItems": "end",
           "children": [
-            {"type": "rectangle", "cornerRadius": 1, "id": "las1", "fill": "#00BFA5", "width": 3, "height": 6},
-            {"type": "rectangle", "cornerRadius": 1, "id": "las2", "fill": "#00BFA5", "width": 3, "height": 10},
-            {"type": "rectangle", "cornerRadius": 1, "id": "las3", "fill": "#00BFA5", "width": 3, "height": 14},
-            {"type": "rectangle", "cornerRadius": 1, "id": "las4", "fill": "#00BFA5", "width": 3, "height": 18},
-            {"type": "rectangle", "cornerRadius": 1, "id": "las5", "fill": "#2C2C2E", "width": 3, "height": 18}
+            {
+              "type": "rectangle",
+              "cornerRadius": 1,
+              "id": "las1",
+              "fill": "#00BFA5",
+              "width": 3,
+              "height": 6
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 1,
+              "id": "las2",
+              "fill": "#00BFA5",
+              "width": 3,
+              "height": 10
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 1,
+              "id": "las3",
+              "fill": "#00BFA5",
+              "width": 3,
+              "height": 14
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 1,
+              "id": "las4",
+              "fill": "#00BFA5",
+              "width": 3,
+              "height": 18
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 1,
+              "id": "las5",
+              "fill": "#2C2C2E",
+              "width": 3,
+              "height": 18
+            }
           ]
         },
         {
@@ -3980,7 +4505,10 @@
           "height": 80,
           "fill": "#2A2318",
           "cornerRadius": 12,
-          "stroke": {"thickness": 1, "fill": "#D4AA40"},
+          "stroke": {
+            "thickness": 1,
+            "fill": "#D4AA40"
+          },
           "layout": "none",
           "children": [
             {
@@ -4157,9 +4685,12 @@
               "y": 0,
               "name": "pd3",
               "fill": "#2C2C2E",
-              "stroke": {"thickness": 1, "fill": "#48484A"},
               "width": 20,
-              "height": 20
+              "height": 20,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#48484A"
+              }
             },
             {
               "type": "ellipse",
@@ -4168,9 +4699,12 @@
               "y": 0,
               "name": "pd4",
               "fill": "#2C2C2E",
-              "stroke": {"thickness": 1, "fill": "#48484A"},
               "width": 20,
-              "height": 20
+              "height": 20,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#48484A"
+              }
             }
           ]
         },
@@ -4307,6 +4841,1318 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "5866p",
+      "x": 6244,
+      "y": 0,
+      "name": "Echo Discovered",
+      "clip": true,
+      "width": 393,
+      "height": 852,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "J4Sbz",
+          "x": -53.5,
+          "y": 176,
+          "name": "adRadar1",
+          "opacity": 0.15,
+          "fill": "transparent",
+          "width": 500,
+          "height": 500,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "X7OS6",
+          "x": 46.5,
+          "y": 276,
+          "name": "adRadar2",
+          "opacity": 0.25,
+          "fill": "transparent",
+          "width": 300,
+          "height": 300,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "6snfp",
+          "x": 146.5,
+          "y": 376,
+          "name": "adRadar3",
+          "opacity": 0.45,
+          "fill": "transparent",
+          "width": 100,
+          "height": 100,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#007A68"
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "IuuHX",
+          "x": 188.5,
+          "y": 418,
+          "name": "adUserDot",
+          "fill": "#00BFA5",
+          "width": 16,
+          "height": 16
+        },
+        {
+          "type": "ellipse",
+          "id": "LM1Fs",
+          "x": 250,
+          "y": 300,
+          "name": "adEchoPoint",
+          "opacity": 0.9,
+          "fill": "#D4AA40",
+          "width": 14,
+          "height": 14
+        },
+        {
+          "type": "ellipse",
+          "id": "kZoOz",
+          "x": 237,
+          "y": 287,
+          "name": "adEchoGlow",
+          "opacity": 0.2,
+          "fill": "#D4AA40",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "text",
+          "id": "iN3iS",
+          "x": 20,
+          "y": 14,
+          "name": "adStatusTime",
+          "fill": "#FFFFFF",
+          "content": "9:41",
+          "fontFamily": "-apple-system",
+          "fontSize": 17,
+          "fontWeight": "600"
+        },
+        {
+          "type": "rectangle",
+          "cornerRadius": 18,
+          "id": "o9p4C",
+          "x": 136.5,
+          "y": 11,
+          "name": "adIsland",
+          "fill": "#000000",
+          "width": 120,
+          "height": 36
+        },
+        {
+          "type": "text",
+          "id": "nTGXj",
+          "x": 106,
+          "y": 79,
+          "name": "adHeader",
+          "fill": "#00BFA5",
+          "content": "◉ 发现信号    1 个回响",
+          "fontFamily": "-apple-system",
+          "fontSize": 15,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "QKug9",
+          "x": 333,
+          "y": 71,
+          "name": "adSosBtn",
+          "width": 44,
+          "height": 44,
+          "fill": "#2A0F0F",
+          "cornerRadius": 22,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "itelW",
+              "x": 10,
+              "y": 10,
+              "name": "adSosIcon",
+              "content": "⚠️",
+              "fontFamily": "-apple-system",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GnhXr",
+          "x": 90,
+          "y": 650,
+          "name": "adLocationBadge",
+          "width": 213,
+          "height": 28,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "3rNCi",
+              "x": 10,
+              "y": 4,
+              "name": "adLocIcon",
+              "content": "📍",
+              "fontFamily": "-apple-system",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "XUQSn",
+              "x": 32,
+              "y": 6,
+              "name": "adLocText",
+              "fill": "#98989F",
+              "content": "北京市朝阳区 · GPS ±5m",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "UVlN6",
+          "x": 24,
+          "y": 690,
+          "name": "adNotifCard",
+          "width": 345,
+          "height": 72,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#D4AA40"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "iQWLi",
+              "x": 16,
+              "y": 14,
+              "name": "adNotifIcon",
+              "fill": "#D4AA40",
+              "content": "✦",
+              "fontFamily": "-apple-system",
+              "fontSize": 24,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "63qqh",
+              "x": 52,
+              "y": 14,
+              "name": "adNotifTitle",
+              "fill": "#FFFFFF",
+              "content": "发现附近的回响",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "1vORv",
+              "x": 52,
+              "y": 38,
+              "name": "adNotifDesc",
+              "fill": "#98989F",
+              "content": "50米外 · 语音回响 · 点击查看",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "kP4GW",
+              "x": 316,
+              "y": 24,
+              "name": "adNotifArrow",
+              "fill": "#D4AA40",
+              "content": "›",
+              "fontFamily": "-apple-system",
+              "fontSize": 24,
+              "fontWeight": "300"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZQqqD",
+          "x": 0,
+          "y": 769,
+          "name": "adTabBar",
+          "width": 393,
+          "height": 83,
+          "fill": "rgba(28,28,30,0.72)",
+          "effect": {
+            "type": "background_blur",
+            "radius": 20
+          },
+          "padding": [
+            8,
+            0,
+            34,
+            0
+          ],
+          "justifyContent": "space_around",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "eOfNT",
+              "name": "adHomeTab",
+              "width": 60,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Hu5Pu",
+                  "name": "adHomeIcon",
+                  "fill": "#D4AA40",
+                  "content": "🏠",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "DIDTq",
+                  "name": "adHomeLabel",
+                  "fill": "#D4AA40",
+                  "content": "首页",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Qcm1t",
+              "name": "adMapTab",
+              "width": 60,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "3GGL3",
+                  "name": "adMapIcon",
+                  "fill": "#98989F",
+                  "content": "🗺",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "QbOj6",
+                  "name": "adMapLabel",
+                  "fill": "#98989F",
+                  "content": "地图",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "L12mS",
+              "name": "adCenterBtn",
+              "width": 44,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "sJZyF",
+                  "x": 2,
+                  "y": 2,
+                  "name": "adCenterBg",
+                  "fill": "#D4AA40",
+                  "width": 40,
+                  "height": 40
+                },
+                {
+                  "type": "text",
+                  "id": "GxTxI",
+                  "x": 10,
+                  "y": 5,
+                  "name": "adCenterPlus",
+                  "fill": "#FFFFFF",
+                  "content": "+",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 24,
+                  "fontWeight": "300"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "btffI",
+              "name": "adFootTab",
+              "width": 60,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "OTBoI",
+                  "name": "adFootIcon",
+                  "fill": "#98989F",
+                  "content": "👣",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "2fGP3",
+                  "name": "adFootLabel",
+                  "fill": "#98989F",
+                  "content": "足迹",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NXnoD",
+              "name": "adSetTab",
+              "width": 60,
+              "height": 44,
+              "fill": "transparent",
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q82qE",
+                  "name": "adSetIcon",
+                  "fill": "#98989F",
+                  "content": "⚙️",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "QES3m",
+                  "name": "adSetLabel",
+                  "fill": "#98989F",
+                  "content": "设置",
+                  "fontFamily": "-apple-system",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "jiWqm",
+      "x": 6687,
+      "y": 0,
+      "name": "Recovery Key",
+      "width": 393,
+      "height": 852,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "aYzU0",
+          "x": 0,
+          "y": 0,
+          "name": "rkHeader",
+          "width": 393,
+          "height": 100,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "YdMBn",
+              "x": 16,
+              "y": 55,
+              "name": "rkBack",
+              "fill": "#FFFFFF",
+              "content": "‹",
+              "fontFamily": "-apple-system",
+              "fontSize": 32,
+              "fontWeight": "300"
+            },
+            {
+              "type": "text",
+              "id": "vgyq3",
+              "x": 138,
+              "y": 64,
+              "name": "rkTitle",
+              "fill": "#FFFFFF",
+              "content": "Recovery Key",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "4BZF1",
+          "x": 164,
+          "y": 140,
+          "name": "rkIcon",
+          "fill": "#00BFA5",
+          "content": "🔑",
+          "fontFamily": "-apple-system",
+          "fontSize": 64,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "2k9D7",
+          "x": 48,
+          "y": 230,
+          "name": "rkDesc",
+          "fill": "#98989F",
+          "content": "这是找回 SOS 数据的唯一凭证",
+          "fontFamily": "-apple-system",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "DeJnO",
+          "x": 80,
+          "y": 258,
+          "name": "rkDesc2",
+          "fill": "#98989F",
+          "content": "请妥善保管，丢失后无法恢复",
+          "fontFamily": "-apple-system",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "pwQqT",
+          "x": 24,
+          "y": 320,
+          "name": "rkKeyCard",
+          "width": 345,
+          "height": 120,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "LsuHz",
+              "x": 16,
+              "y": 16,
+              "name": "rkKeyLabel",
+              "fill": "#98989F",
+              "content": "你的 Recovery Key",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "x8wb7",
+              "x": 16,
+              "y": 46,
+              "name": "rkKeyValue",
+              "fill": "#FFFFFF",
+              "content": "A7K2-M9X4-P3L8-W6N1",
+              "fontFamily": "-apple-system",
+              "fontSize": 22,
+              "fontWeight": "600",
+              "letterSpacing": 2
+            },
+            {
+              "type": "text",
+              "id": "GWZV5",
+              "x": 16,
+              "y": 86,
+              "name": "rkKeyHint",
+              "fill": "#6C6C74",
+              "content": "点击上方密钥可复制到剪贴板",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Fc7le",
+          "x": 24,
+          "y": 470,
+          "name": "rkWarningCard",
+          "width": 345,
+          "height": 100,
+          "fill": "#2A0F0F",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 0.5,
+            "fill": "#FF453A"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "3YQOk",
+              "x": 16,
+              "y": 16,
+              "name": "rkWarnIcon",
+              "fill": "#FF453A",
+              "content": "⚠️",
+              "fontFamily": "-apple-system",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "5pwCw",
+              "x": 48,
+              "y": 18,
+              "name": "rkWarnTitle",
+              "fill": "#FF453A",
+              "content": "安全提醒",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "9F2jE",
+              "x": 16,
+              "y": 52,
+              "name": "rkWarnDesc",
+              "fill": "#FF453A",
+              "content": "Recovery Key 不会存储在服务器上。",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "9RF3Q",
+              "x": 16,
+              "y": 72,
+              "name": "rkWarnDesc2",
+              "fill": "#FF453A",
+              "content": "如果丢失，SOS 数据将永远无法找回。",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hXzlO",
+          "x": 24,
+          "y": 610,
+          "name": "rkCopyBtn",
+          "width": 345,
+          "height": 56,
+          "fill": "#00BFA5",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "QvKAv",
+              "x": 118,
+              "y": 18,
+              "name": "rkCopyText",
+              "fill": "#FFFFFF",
+              "content": "复制 Key",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Zkkj5",
+          "x": 24,
+          "y": 686,
+          "name": "rkConfirmBtn",
+          "width": 345,
+          "height": 56,
+          "fill": "transparent",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#38383A"
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "tztHl",
+              "x": 108,
+              "y": 18,
+              "name": "rkConfirmText",
+              "fill": "#98989F",
+              "content": "我已安全备份",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "T8Nkm",
+      "x": 7130,
+      "y": 0,
+      "name": "Time Lock Locked",
+      "width": 393,
+      "height": 852,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "kpUPJ",
+          "x": 0,
+          "y": 0,
+          "name": "tlHeader",
+          "width": 393,
+          "height": 100,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "4f6wh",
+              "x": 16,
+              "y": 55,
+              "name": "tlBack",
+              "fill": "#FFFFFF",
+              "content": "‹",
+              "fontFamily": "-apple-system",
+              "fontSize": 32,
+              "fontWeight": "300"
+            },
+            {
+              "type": "text",
+              "id": "rTcNg",
+              "x": 148,
+              "y": 64,
+              "name": "tlTitle",
+              "fill": "#FFFFFF",
+              "content": "发现回响",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "DozUD",
+          "x": 24,
+          "y": 120,
+          "name": "tlEchoCard",
+          "width": 345,
+          "height": 80,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "aCSzG",
+              "name": "tlEchoType",
+              "fill": "#FFFFFF",
+              "content": "🔒 加密时间胶囊",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "j8YqP",
+              "name": "tlEchoSource",
+              "fill": "#98989F",
+              "content": "来自匿名旅行者 · 2026年1月1日埋藏",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "ellipse",
+          "id": "FqRby",
+          "x": 136.5,
+          "y": 260,
+          "name": "tlLockGlow",
+          "opacity": 0.08,
+          "fill": "#D4AA40",
+          "width": 120,
+          "height": 120
+        },
+        {
+          "type": "ellipse",
+          "id": "mxiC0",
+          "x": 156.5,
+          "y": 280,
+          "name": "tlLockCircle",
+          "fill": "#2A2318",
+          "width": 80,
+          "height": 80,
+          "stroke": {
+            "thickness": 2,
+            "fill": "#D4AA40"
+          }
+        },
+        {
+          "type": "text",
+          "id": "bce3s",
+          "x": 176,
+          "y": 296,
+          "name": "tlLockIcon",
+          "fill": "#D4AA40",
+          "content": "🔒",
+          "fontFamily": "-apple-system",
+          "fontSize": 36,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "Syjzn",
+          "x": 140,
+          "y": 420,
+          "name": "tlCountdownLabel",
+          "fill": "#98989F",
+          "content": "距离开启还有",
+          "fontFamily": "-apple-system",
+          "fontSize": 15,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "KYIcj",
+          "x": 80,
+          "y": 460,
+          "name": "tlCountdown",
+          "fill": "#D4AA40",
+          "content": "1,460 天",
+          "fontFamily": "-apple-system",
+          "fontSize": 56,
+          "fontWeight": "300"
+        },
+        {
+          "type": "text",
+          "id": "TsGRq",
+          "x": 118,
+          "y": 540,
+          "name": "tlOpenDate",
+          "fill": "#98989F",
+          "content": "将于 2030年1月1日 00:00 开启",
+          "fontFamily": "-apple-system",
+          "fontSize": 15,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "iDVtR",
+          "x": 24,
+          "y": 620,
+          "name": "tlRemindBtn",
+          "width": 345,
+          "height": 56,
+          "fill": "#D4AA40",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "XJ2gr",
+              "x": 112,
+              "y": 18,
+              "name": "tlRemindText",
+              "fill": "#1A1400",
+              "content": "⏰ 设置提醒",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "N8l6b",
+          "x": 168,
+          "y": 700,
+          "name": "tlBackText",
+          "fill": "#98989F",
+          "content": "返回地图",
+          "fontFamily": "-apple-system",
+          "fontSize": 15,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "mJ8dW",
+      "x": 7573,
+      "y": 0,
+      "name": "Pro Subscription",
+      "width": 393,
+      "height": 852,
+      "fill": "#000000",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "A6iRN",
+          "x": 0,
+          "y": 0,
+          "name": "proHeader",
+          "width": 393,
+          "height": 100,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "Jqe4X",
+              "x": 16,
+              "y": 55,
+              "name": "proBack",
+              "fill": "#FFFFFF",
+              "content": "‹",
+              "fontFamily": "-apple-system",
+              "fontSize": 32,
+              "fontWeight": "300"
+            },
+            {
+              "type": "text",
+              "id": "7bWjP",
+              "x": 148,
+              "y": 64,
+              "name": "proTitle",
+              "fill": "#D4AA40",
+              "content": "Echoes Pro",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "PHWYn",
+          "x": 178,
+          "y": 130,
+          "name": "proBadge",
+          "fill": "#D4AA40",
+          "content": "✦",
+          "fontFamily": "-apple-system",
+          "fontSize": 48,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "HgEml",
+          "x": 100,
+          "y": 200,
+          "name": "proSlogan",
+          "fill": "#EAD07A",
+          "content": "解锁完整的回响体验",
+          "fontFamily": "-apple-system",
+          "fontSize": 22,
+          "fontWeight": "600"
+        },
+        {
+          "type": "text",
+          "id": "qIMro",
+          "x": 152,
+          "y": 245,
+          "name": "proPrice",
+          "fill": "#98989F",
+          "content": "¥12 / 月",
+          "fontFamily": "-apple-system",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "dY7UH",
+          "x": 24,
+          "y": 300,
+          "name": "proFeature1",
+          "width": 345,
+          "height": 70,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "6ijjL",
+              "x": 20,
+              "y": 16,
+              "name": "proF1Icon",
+              "fill": "#D4AA40",
+              "content": "🗺",
+              "fontFamily": "-apple-system",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "FLMNq",
+              "x": 64,
+              "y": 16,
+              "name": "proF1Title",
+              "fill": "#FFFFFF",
+              "content": "附近的秘密地图",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "DnwfS",
+              "x": 64,
+              "y": 40,
+              "name": "proF1Desc",
+              "fill": "#98989F",
+              "content": "解锁大范围热力图，发现更多回响",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "b5cfl",
+          "x": 24,
+          "y": 384,
+          "name": "proFeature2",
+          "width": 345,
+          "height": 70,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "LkoxQ",
+              "x": 20,
+              "y": 16,
+              "name": "proF2Icon",
+              "fill": "#D4AA40",
+              "content": "📹",
+              "fontFamily": "-apple-system",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Yznzs",
+              "x": 64,
+              "y": 16,
+              "name": "proF2Title",
+              "fill": "#FFFFFF",
+              "content": "无限视频上传",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "SeyjF",
+              "x": 64,
+              "y": 40,
+              "name": "proF2Desc",
+              "fill": "#98989F",
+              "content": "4K 视频和全景照片，不限次数",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ummkG",
+          "x": 24,
+          "y": 468,
+          "name": "proFeature3",
+          "width": 345,
+          "height": 70,
+          "fill": "#1C1C1E",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "cUEeP",
+              "x": 20,
+              "y": 16,
+              "name": "proF3Icon",
+              "fill": "#D4AA40",
+              "content": "✦",
+              "fontFamily": "-apple-system",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "zqc0X",
+              "x": 64,
+              "y": 16,
+              "name": "proF3Title",
+              "fill": "#FFFFFF",
+              "content": "专属金色光点",
+              "fontFamily": "-apple-system",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "o8EiA",
+              "x": 64,
+              "y": 40,
+              "name": "proF3Desc",
+              "fill": "#98989F",
+              "content": "你的回响在地图上闪耀金色光芒",
+              "fontFamily": "-apple-system",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3xGsT",
+          "x": 24,
+          "y": 580,
+          "name": "proSubBtn",
+          "width": 345,
+          "height": 56,
+          "fill": "#D4AA40",
+          "cornerRadius": 12,
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "Oqczt",
+              "x": 100,
+              "y": 18,
+              "name": "proSubText",
+              "fill": "#1A1400",
+              "content": "立即订阅 Pro",
+              "fontFamily": "-apple-system",
+              "fontSize": 18,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "W23hF",
+          "x": 148,
+          "y": 660,
+          "name": "proRestore",
+          "fill": "#98989F",
+          "content": "恢复购买",
+          "fontFamily": "-apple-system",
+          "fontSize": 15,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "nu9jr",
+          "x": 80,
+          "y": 700,
+          "name": "proTerms",
+          "fill": "#6C6C74",
+          "content": "订阅将自动续费，可随时在设置中取消",
+          "fontFamily": "-apple-system",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
     }
-  ]
+  ],
+  "variables": {
+    "bg-card": {
+      "type": "color",
+      "value": "#1C1C1E"
+    },
+    "bg-emergency": {
+      "type": "color",
+      "value": "#0A0505"
+    },
+    "bg-emergency-card": {
+      "type": "color",
+      "value": "#2A0F0F"
+    },
+    "bg-primary": {
+      "type": "color",
+      "value": "#000000"
+    },
+    "bg-pro": {
+      "type": "color",
+      "value": "#2A2318"
+    },
+    "bg-secondary": {
+      "type": "color",
+      "value": "#1C1C1E"
+    },
+    "bg-tertiary": {
+      "type": "color",
+      "value": "#2C2C2E"
+    },
+    "border-default": {
+      "type": "color",
+      "value": "#38383A"
+    },
+    "border-gold": {
+      "type": "color",
+      "value": "#D4AA40"
+    },
+    "gold-100": {
+      "type": "color",
+      "value": "#EAD07A"
+    },
+    "gold-300": {
+      "type": "color",
+      "value": "#E0BE5C"
+    },
+    "gold-400": {
+      "type": "color",
+      "value": "#D4AA40"
+    },
+    "gold-500": {
+      "type": "color",
+      "value": "#B89A4A"
+    },
+    "gold-700": {
+      "type": "color",
+      "value": "#8A7535"
+    },
+    "purple-500": {
+      "type": "color",
+      "value": "#8E6DAF"
+    },
+    "radius-full": {
+      "type": "number",
+      "value": 9999
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 22
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 12
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 4
+    },
+    "radius-xs": {
+      "type": "number",
+      "value": 2
+    },
+    "red-500": {
+      "type": "color",
+      "value": "#FF453A"
+    },
+    "spacing-lg": {
+      "type": "number",
+      "value": 24
+    },
+    "spacing-md": {
+      "type": "number",
+      "value": 16
+    },
+    "spacing-sm": {
+      "type": "number",
+      "value": 8
+    },
+    "spacing-xl": {
+      "type": "number",
+      "value": 32
+    },
+    "spacing-xs": {
+      "type": "number",
+      "value": 4
+    },
+    "teal-300": {
+      "type": "color",
+      "value": "#007A68"
+    },
+    "teal-500": {
+      "type": "color",
+      "value": "#00BFA5"
+    },
+    "text-gold": {
+      "type": "color",
+      "value": "#D4AA40"
+    },
+    "text-muted": {
+      "type": "color",
+      "value": "#6C6C74"
+    },
+    "text-primary": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "text-secondary": {
+      "type": "color",
+      "value": "#98989F"
+    }
+  }
 }

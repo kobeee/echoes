@@ -1,4 +1,4 @@
-# iFlow 项目配置 - Echoes
+# CLAUDE 项目配置 - Echoes
 
 **项目名称**: 回响 (Echoes / GeoTrace)  
 **项目类型**: iOS App 设计与原型开发  
