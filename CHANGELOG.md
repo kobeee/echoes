@@ -1,5 +1,130 @@
 # Echoes 项目变更日志
 
+## 2026-02-12 - UI 细节持续打磨（布局重构 + 居中修复）
+
+### TabBar 中心按钮补漏
+- [修复] Echo Discovered TabBar "+" 按钮：ellipse+text → frame(圆角20) layout 居中
+- [修复] Widget Small "+" 按钮：ellipse+text → frame(圆角16) layout 居中
+
+### Drop View 麦克风按钮重构
+- [重构] 录制按钮：ellipse(120) + 独立 text 手动定位 → frame(120×120 圆角60) layout 居中麦克风
+- [修复] 麦克风图标完美居中于金色圆形内
+
+### Echo Content View 播放控件修复
+- [修复] 播放按钮 ▶ 与时间 "00:23 / 01:00" 重叠 → 合并为同一行 horizontal layout 居中
+
+### My Footprints 页面全面重构
+- [重构] 统计卡片：手动 x/y 六个文字 → horizontal layout(space_around) + 三列 vertical layout(alignItems center)
+- [重构] 时间线条目：手动定位图标+文字 → horizontal layout(alignItems center) + 圆形图标容器(♫/✎) + vertical 文字区
+- [重构] 时间线结构：删除浮动 line/ellipse/label，改为 vertical layout 内嵌 "今天"→条目→"昨天"→条目
+- [修复] 图标从不可见的 emoji 改为圆形灰底(#2C2C2E)+金色符号，清晰可见
+
+### Drop Success 对勾居中修复
+- [重构] 对勾：ellipse(60) + 手动定位 "✓" → frame(60×60 圆角30) layout 居中 "✓"
+
+### Recovery Key 安全提醒卡片重构
+- [重构] 警告卡片：vertical layout(四行堆叠) → horizontal layout [图标容器 | vertical 文字区(标题+两行描述)]
+
+### Echo Discovered 通知卡片重构
+- [重构] 通知卡片：手动 x/y 四个元素 → horizontal layout [图标容器 | vertical 文字区 | 箭头]
+
+### Pro Subscription 功能卡片重构
+- [重构] 三张功能卡片：手动 x/y → horizontal layout [图标容器(40×40 居中) | vertical 文字区(标题+描述)]
+
+### Launch Screen 精确居中
+- [修复] 同心圆组+文字整体上移 27px，视觉重心精确落在页面垂直中心
+- [修复] "ECHOES" letterSpacing 8→6，减少末尾多余间距导致的视觉偏移
+
+### Settings 栏目标题对齐
+- [修复] "隐私"/"通知"/"关于" section header 左边距 x:24→x:40，与卡片内文字左边距对齐
+- [修复] section header 颜色统一为 #6C6C74，更符合 iOS Settings 风格
+
+---
+
+## 2026-02-12 - 全页面文字居中与按钮对齐全面修复（20页全覆盖）
+
+### 按钮容器全局修复（layout: none → layout 居中）
+- [重构] Permission Request "允许使用位置" 按钮 → layout 水平垂直居中
+- [重构] Drop Success "分享给朋友来寻宝" / "返回地图" 按钮 → layout 居中
+- [重构] SOS Complete "知道了" 按钮 → layout 居中
+- [重构] Recovery Key "复制 Key" / "我已安全备份" 按钮 → layout 居中
+- [重构] Time Lock "⏰ 设置提醒" 按钮 → layout 居中
+- [重构] Pro Subscription "立即订阅 Pro" 按钮 → layout 居中
+- [重构] Main Map / Echo Discovered SOS 按钮 → layout 居中
+- [重构] SOS Complete 关闭按钮 → layout 居中
+- [重构] Echo Discovered 位置徽章 → layout 居中
+
+### 导航栏标题全局修复（8页）
+- [修复] Drop View / Pickup View / Settings / Echo Content / Recovery Key / Time Lock / Pro Subscription / Passcode Entry 导航栏标题 → textAlign center + fixed-width 全宽居中
+
+### 居中文字修复
+- [修复] Permission Request: 图标、标题、三行描述、"稍后再说" 全部居中
+- [修复] Drop Success: "回响已埋下"、位置、信息文字全部居中
+- [修复] SOS Complete: "数据已安全保存" 标题、对勾居中；信息卡片和密钥卡片改为 layout 垂直居中
+- [修复] Recovery Key: 钥匙图标、两行描述居中；密钥卡片和警告卡片改为 layout 垂直居中
+- [修复] Passcode Entry: 锁图标、标题、提示全部居中
+- [修复] Time Lock: 倒计时标签、天数、日期、"返回地图" 全部居中；锁图标居中
+- [修复] Pro Subscription: 星标、标题、价格、"恢复购买"、条款全部居中
+- [修复] Empty Map: 标题和描述全部居中
+- [修复] Echo Discovered: 通知卡片内容垂直间距优化
+
+### Pro Feature 卡片垂直间距优化
+- [修复] 三个功能卡片图标、标题、描述 y 坐标统一调整，垂直居中
+
+---
+
+## 2026-02-12 - 全局 UI 细节精修（对齐、居中、间距、重叠修复）
+
+### TabBar 中心按钮重构（4页统一修复）
+- [重构] Main Map / My Footprints / Settings / Empty Map 四页 TabBar 中心按钮
+- [重构] 旧结构 `ellipse(40x40) + text(手动x,y)` → 新结构 `frame(layout居中) > frame(40x40 圆角20 gold layout居中) > "+"`
+- [修复] "+" 号完美居中于金色圆形内，不再依赖手动坐标
+
+### Main Map 主页修复
+- [修复] 位置徽章 (locationBadge) 转为 horizontal layout 居中布局，文字水平垂直居中
+
+### Drop View 录制页修复
+- [修复] 计时器 "00:00" 全宽居中（textAlign center + fixed-width）
+- [修复] "公开"/"加密" 选项容器改为 horizontal layout 居中，文字自动居中
+- [修复] 麦克风图标放大 (fontSize 36→48) 并居中于录制按钮中心
+
+### Black Box 紧急模式修复
+- [修复] "⚠️ 紧急模式" 标题全宽居中
+- [修复] 计时器重叠问题：合并 "/" 和 "00:30" 为单行，缩小 timer frame 高度 (130→100)
+- [修复] 状态文字 "正在上传至云端 SOS 坐标..." 下移至 y:410 避免与计时器重叠，居中对齐
+- [修复] "停止并保存" 按钮改为 layout 居中，文字水平垂直自动居中
+- [修复] 加密提示卡片改为 horizontal layout，图标与文字自动对齐
+- [修复] 进度文字 "12/30 秒已安全上传至云端" 居中对齐
+
+### Pickup View 发现回响页修复
+- [修复] "距离" 标签全宽居中（textAlign center）
+- [修复] "15" 与 "米" 文字重叠：调整 "米" 位置 (x:220,y:535 → x:230,y:530) 消除重叠
+- [修复] "🔓 解锁内容" 按钮改为 layout 居中，文字水平垂直自动居中
+
+### Echo Content View 回响播放页修复
+- [修复] 播放按钮 "▶" 全宽居中
+- [修复] 时间文字 "00:23 / 01:00" 居中
+- [修复] 统计标签 "距离这个回响被埋下，已经过去" 居中
+- [修复] 统计时间 "3 天 4 小时" 居中
+- [修复] "✓ 标记为已阅" 按钮改为 layout 居中
+
+### My Footprints 足迹页修复
+- [修复] 统计卡片三列布局：每列 115px 宽，数字和标签均 textAlign center
+- [修复] 数字与标签垂直间距优化 (y:20,50 → y:16,50)
+- [修复] 时间线竖线长度修正 (height:300 → 86)，精确连接两个节点
+- [修复] "昨天" 标签位置对齐至第二条目 (y:320 → 306)
+- [修复] 时间线条目图标垂直居中 (y:23 → 25)
+
+### Settings 设置页修复
+- [修复] 通知分组间距统一 (y:474 → 476)，与 section header 保持 16px 间距
+- [修复] 关于 section header 和 group 位置微调，保持一致间距
+
+### Launch Screen 启动页修复
+- [修复] "ECHOES" 品牌名全宽居中（textAlign center + fixed-width）
+- [修复] slogan "只有身临其境，才能听见回响" 全宽居中
+
+---
+
 ## 2026-02-12 - 设计闭环 v4.0（16页→20页，9条流程全部闭环）
 
 ### 设计系统建立
