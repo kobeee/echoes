@@ -1,5 +1,39 @@
 # Echoes 项目变更日志
 
+## 2026-02-12 - Widget Medium 文字居中修正
+
+### Widget Medium 右侧内容对齐
+- [修复] 右侧文字群组整体上移 5px，与左侧雷达框垂直中心对齐
+- [修复] "距离最近的回响" y:24→19, "250 m" y:45→40, 信号条 y:85→80, CTA y:125→120
+
+---
+
+## 2026-02-12 - Settings 页面全面美化重构
+
+### Profile 卡片布局优化
+- [重构] Profile 卡片：layout:none 手动定位 → layout:horizontal + alignItems:center + gap:16
+- [新增] 文字容器：vertical layout(gap:4) 包裹 Device ID + Recovery Key，与头像自动对齐
+
+### 隐私分组重构（layout 布局 + iOS Toggle）
+- [重构] 隐私卡片组：layout:none 手动定位所有子元素 → layout:vertical 自动排列
+- [重构] 每行设置项：独立 horizontal layout 行容器(44px高, space_between, alignItems:center, padding:[0,16])
+- [新增] iOS 风格 Toggle 开关：圆角矩形(51×31) + 白色圆形滑块(27×27)
+- [优化] Toggle 开启态：#00BFA5 青色 + 滑块 flex_end(靠右)
+- [优化] Toggle 关闭态：#48484A 灰色 + 滑块 flex_start(靠左)
+- [新增] 缩进分隔线：透明 wrapper(padding-left:16) + #38383A 细线，模拟 iOS 原生效果
+
+### 通知分组重构
+- [重构] 通知卡片组：同隐私分组，layout:vertical + horizontal 行容器
+- [新增] 2 行 Toggle 开关（附近回响通知/震动反馈），均带白色滑块
+
+### 关于分组重构
+- [重构] 关于卡片组：layout:vertical + 4 行 horizontal 行容器
+- [优化] 版本号行：左侧 "版本" + 右侧 "1.0.0"(#98989F) 自动对齐
+- [优化] 导航行（隐私政策/联系我们/给我们评分）：右侧 › 箭头(#98989F, 22pt, weight:300)
+- [新增] 行间缩进分隔线，与隐私/通知分组保持一致
+
+---
+
 ## 2026-02-12 - UI 细节持续打磨（布局重构 + 居中修复）
 
 ### TabBar 中心按钮补漏
