@@ -7,6 +7,14 @@
         "--app",
         "visual_studio_code"
       ]
+    },
+    "xcodebuild": {
+      "command": "npx",
+      "args": [
+        "-y", 
+        "xcodebuildmcp@latest", 
+        "mcp"
+      ]
     }
   }
 }

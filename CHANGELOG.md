@@ -1,5 +1,110 @@
 # Echoes 项目变更日志
 
+## 2026-02-14 - iOS APP 全面问题审查
+
+### 审查概述
+- [审查] 对 Echoes iOS APP 进行全面问题排查
+- [发现] 1个严重问题（屏幕适配/黑边）+ 多个中度问题 + 若干细节问题
+- [输出] `docs/review/ios-app-issue-report-v1.0.md` 详细问题报告
+
+### 严重问题（P0 - 必须立即修复）
+- [问题] **屏幕适配缺陷**: APP在iPhone 17 Pro上下出现黑边，未占满全屏
+- [原因] Info.plist缺少启动屏幕配置 + RootView.swift布局锚点问题 + 硬编码padding值
+- [影响] 所有页面，影响用户体验
+
+### 中度问题（P1 - 应该修复）
+- [问题] **Main Map视觉还原差异**: 
+  - 雷达缺少十字参考线
+  - Echo点和用户位置点缺少辉光效果
+  - TabBar使用系统样式，缺少毛玻璃效果
+- [问题] **Drop View波形可视化**: 高度计算简单，不是音频分布模式
+- [问题] **TabBar样式不符**: 中间"+"按钮不是金色凸起效果
+
+### 一般问题（P2 - 建议修复）
+- [问题] **Info.plist配置不完整**: 缺少启动屏幕、屏幕方向、权限描述等配置
+- [问题] **颜色系统差异**: `textSecondary`颜色值与视觉稿不符
+- [问题] **组件细节**: CardContainer缺少阴影效果
+
+### 参考文档
+- **详细报告**: `docs/review/ios-app-issue-report-v1.0.md`
+- **视觉稿原型**: `echoes.pen` (20个页面)
+- **PRD**: `docs/prd/v1.0.md`
+
+---
+
+## 2026-02-13 - iOS 主壳 TabBar 最终修复闭环
+
+### 导航与布局
+- [修复] 主壳导航统一为系统 `TabView`，去除未使用的自定义 `EchoTabBar` 实现，避免底部 Tab 丢失
+- [修复] `MapHomeView` 调整为顶部扫描条 + 雷达中心 + 底部发现卡片上浮布局，显式预留 TabBar/Home Indicator 安全空间
+- [优化] App/Map 主页面容器统一 `maxWidth/maxHeight` 约束，稳定主壳渲染
+
+### 工程与稳定性
+- [修复] `EchoesWidgets` 扩展 `Info.plist` 补齐 `NSExtensionPointIdentifier`，解决安装/测试时 appex 占位符异常
+- [修复] 重新生成 Xcode 工程以同步删除文件后的编译清单，恢复完整构建链路
+
+### 文档与验证
+- [新增] `docs/design/ios/ios-tabbar-best-practice-note-v1.0.md`（官方规范依据 + 方案落地）
+- [修改] `docs/design/ios/ios-mcp-verification-report-v1.0.md`（更新 TabBar 专项修复与运行验证结论）
+- [验证] XcodeBuildMCP：`build_sim` 通过、`test_sim` 通过（6/6）、安装与启动通过，首页截图确认底部 5 Tab 可见
+
+## 2026-02-13 - TabBar 可见性修复与主壳布局稳定化
+
+### 关键修复
+- [修复] 主壳布局改为 `GeometryReader + ZStack(bottom)`，为页面内容预留底部空间，避免 TabBar 被内容挤出或落入 Home Indicator 区域
+- [修复] TabBar 跟随 `safeAreaInsets.bottom` 上浮，保证在不同 iPhone 安全区下稳定可见
+- [优化] TabBar 底部内边距统一为 `spacing-sm`，减少视觉遮挡与裁切风险
+
+### 验证辅助
+- [新增] App 启动参数 `--force-main-shell`（仅用于模拟器自测），可直接进入主壳检查 TabBar 和主页面布局
+- [验证] 使用 XcodeBuildMCP 完成 build/install/launch 回归；`build_sim` 与 `test_sim` 持续通过
+
+---
+
+## 2026-02-13 - iOS 第二轮高保真还原与闭环增强
+
+### 视觉还原与页面重构
+- [重构] Main Map / Empty Map / Echo Discovered：改为雷达中心布局 + 扫描状态 + 底部发现卡片，对齐 `echoes.pen`
+- [重构] Drop / Pickup：按视觉稿重排核心结构（录制态、目标卡片、距离主数字、信号条、解锁入口）
+- [重构] Passcode / TimeLock / Echo Content / Recovery Key / Pro / SOS Complete：完成高保真界面重绘
+- [重构] Footprints / Settings：统一 section 层级、卡片密度与 iOS 暗色视觉节奏
+
+### 系统能力与路由修复
+- [优化] Widget Small / Medium 与 Live Activity 文案与布局细节对齐视觉稿
+- [修复] Deep Link 统一强制进入主流程（`phase = .main`），避免首启权限态阻断跳转
+- [修复] Pickup Live Activity 启动前先结束旧 Activity，避免并发追踪冲突
+- [新增] `src/backend/README.md` 与 `src/ios/EchoesApp/.gitignore`，明确目录边界并规避构建产物污染
+
+### 文档与验证
+- [新增] `docs/design/ios/ios-visual-fidelity-audit-v1.0.md`：20 页面逐页对照清单与还原结论
+- [新增] `docs/design/ios/ios-mcp-verification-report-v1.0.md`：构建/测试/运行验证报告
+- [验证] XcodeBuildMCP `build_sim` 通过，`test_sim` 通过（6/6）
+
+---
+
+## 2026-02-13 - iOS 端全量研发落地（Mock 闭环）
+
+### 研发方案与实施文档
+- [新增] `docs/design/ios/ios-rd-master-plan-v1.0.md`：确定唯一最优研发路径、目标架构、模块映射与扩展边界
+- [新增] `docs/design/ios/ios-implementation-spec-v1.0.md`：定义实现规格、路由、Mock 边界、测试与验收标准
+- [确认] iPhone iOS App 先行交付；watchOS / visionOS 以协议边界和目录规划预留
+
+### iOS 工程与功能实现
+- [新增] `src/ios/EchoesApp` 独立 Xcode 工程（不占用 `src/backend` 预留空间）
+- [新增] 主流程功能：Launch、权限流、Map 雷达、Drop、Pickup、SOS、Footprints、Settings、Pro
+- [新增] 状态页闭环：Drop Success、Passcode、Time Lock、Echo Content、SOS Complete、Recovery Key
+- [新增] 系统集成：WidgetKit（Small/Medium）、Live Activity、App Intents
+- [新增] Mock Repository + AppStore 状态层，完成无后端条件下的产品闭环
+
+### 自验证与修复
+- [验证] XcodeBuildMCP `build_sim` 通过（EchoesApp）
+- [验证] XcodeBuildMCP `test_sim` 通过（4/4）
+- [验证] 通过 MCP 完成模拟器安装与启动（Bundle ID: `com.echoes.app`）
+- [修复] Widget Extension `Info.plist` 移除 `NSExtensionPrincipalClass`，解决安装报错并符合 WidgetKit 扩展点约束
+- [修复] App `Info.plist` 增加 `echoes://` URL Scheme 与 `NSSupportsLiveActivities`，确保 App Intents 深链路与 Live Activity 行为完整生效
+
+---
+
 ## 2026-02-12 - Widget Medium 文字居中修正
 
 ### Widget Medium 右侧内容对齐

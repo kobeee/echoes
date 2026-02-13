@@ -1,0 +1,101 @@
+name: EchoesApp
+options:
+  deploymentTarget:
+    iOS: "19.0"
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    IPHONEOS_DEPLOYMENT_TARGET: 19.0
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    SUPPORTED_PLATFORMS: "iphonesimulator iphoneos"
+    SDKROOT: auto
+
+targets:
+  EchoesApp:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Features
+      - Shared
+      - Intents
+    resources:
+      - Resources
+    info:
+      path: App/Info.plist
+    settings:
+      base:
+        SDKROOT: auto
+        PRODUCT_BUNDLE_IDENTIFIER: com.echoes.app
+        PRODUCT_NAME: Echoes
+        TARGETED_DEVICE_FAMILY: 1
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        CODE_SIGNING_ALLOWED: NO
+    dependencies:
+      - target: EchoesWidgets
+        embed: true
+
+  EchoesWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widgets
+      - Shared
+      - Intents
+    resources:
+      - Resources/Assets.xcassets
+    info:
+      path: Widgets/Info.plist
+    settings:
+      base:
+        SDKROOT: auto
+        PRODUCT_BUNDLE_IDENTIFIER: com.echoes.app.widgets
+        PRODUCT_NAME: EchoesWidgets
+        SKIP_INSTALL: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+        CODE_SIGNING_ALLOWED: NO
+
+  EchoesAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    dependencies:
+      - target: EchoesApp
+    settings:
+      base:
+        SDKROOT: auto
+        PRODUCT_BUNDLE_IDENTIFIER: com.echoes.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Echoes.app/Echoes
+        BUNDLE_LOADER: $(TEST_HOST)
+        CODE_SIGNING_ALLOWED: NO
+
+schemes:
+  EchoesApp:
+    build:
+      targets:
+        EchoesApp: all
+        EchoesWidgets: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - EchoesAppTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+  EchoesWidgets:
+    build:
+      targets:
+        EchoesWidgets: all

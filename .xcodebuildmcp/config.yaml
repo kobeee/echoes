@@ -1,0 +1,8 @@
+schemaVersion: 1
+sessionDefaults:
+  projectPath: /Users/elvis/Documents/codes/challenges/2026/Jan/echoes/src/ios/EchoesApp/EchoesApp.xcodeproj
+  scheme: EchoesApp
+  simulatorName: iPhone 17 Pro
+  simulatorId: 4008A1D1-85F8-42AC-8AA1-CDFF7529F9F9
+  simulatorPlatform: iOS Simulator
+  bundleId: com.echoes.app
