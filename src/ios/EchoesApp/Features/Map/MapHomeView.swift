@@ -5,28 +5,31 @@ struct MapHomeView: View {
 
     var body: some View {
         ZStack {
+            // 背景 - 填满整个屏幕
             EchoesColor.bgPrimary
                 .ignoresSafeArea()
-
+            
+            // 雷达区域 - 居中显示
             RadarView(
                 showsEchoes: !store.nearbyEchoes.isEmpty,
                 echoes: store.nearbyEchoes,
-                size: 330
+                size: 300
             )
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            // 顶部栏
+            VStack {
+                topBar
+                    .padding(.horizontal, EchoesSpacing.md)
+                    .padding(.top, 8)
+                
+                Spacer()
+                
+                // 底部内容
+                bottomContent
+                    .padding(.horizontal, EchoesSpacing.md)
+                    .padding(.bottom, 100) // 为 TabBar 留出空间
+            }
         }
-        .overlay(alignment: .top) {
-            topBar
-                .padding(.horizontal, EchoesSpacing.md)
-                .padding(.top, 62)
-        }
-        .overlay(alignment: .bottom) {
-            bottomContent
-                .padding(.horizontal, EchoesSpacing.md)
-                // Reserve space for the iOS floating Tab Bar + home indicator.
-                .padding(.bottom, 112)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     @ViewBuilder

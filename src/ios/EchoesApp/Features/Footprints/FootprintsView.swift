@@ -4,24 +4,31 @@ struct FootprintsView: View {
     @EnvironmentObject private var store: AppStore
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: EchoesSpacing.md) {
-                Text("我的足迹")
-                    .font(EchoesFont.largeTitle)
-                    .foregroundStyle(EchoesColor.textPrimary)
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading, spacing: EchoesSpacing.md) {
+                    Text("我的足迹")
+                        .font(EchoesFont.largeTitle)
+                        .foregroundStyle(EchoesColor.textPrimary)
+                        .padding(.top, geometry.safeAreaInsets.top)
 
-                statsCard
+                    statsCard
 
-                if store.footprints.isEmpty {
-                    emptyState
-                } else {
-                    timeline
+                    if store.footprints.isEmpty {
+                        emptyState
+                    } else {
+                        timeline
+                    }
+                    
+                    // 为 TabBar 预留空间
+                    Spacer()
+                        .frame(height: geometry.safeAreaInsets.bottom + 100)
                 }
+                .padding(EchoesSpacing.md)
             }
-            .padding(EchoesSpacing.md)
-            .padding(.bottom, EchoesSpacing.lg)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(EchoesColor.bgPrimary)
+        .background(EchoesColor.bgPrimary.ignoresSafeArea())
     }
 
     private var statsCard: some View {

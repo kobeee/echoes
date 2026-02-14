@@ -15,6 +15,13 @@
         "xcodebuildmcp@latest", 
         "mcp"
       ]
+    },
+    "ios-simulator": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "ios-simulator-mcp"
+      ]
     }
   }
 }

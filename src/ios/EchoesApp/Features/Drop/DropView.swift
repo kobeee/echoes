@@ -4,38 +4,41 @@ struct DropView: View {
     @EnvironmentObject private var store: AppStore
 
     var body: some View {
-        VStack(spacing: EchoesSpacing.md) {
-            Text("创建回响")
-                .font(EchoesFont.headline)
-                .foregroundStyle(EchoesColor.textPrimary)
-                .padding(.top, EchoesSpacing.lg)
+        GeometryReader { geometry in
+            VStack(spacing: EchoesSpacing.md) {
+                Text("创建回响")
+                    .font(EchoesFont.headline)
+                    .foregroundStyle(EchoesColor.textPrimary)
+                    .padding(.top, geometry.safeAreaInsets.top + EchoesSpacing.md)
 
-            modePicker
-                .padding(.horizontal, EchoesSpacing.md)
-
-            if store.dropDraft.isVoiceMode {
-                voiceComposer
-            } else {
-                textComposer
-            }
-
-            visibilityPicker
-                .padding(.horizontal, EchoesSpacing.md)
-
-            timeLockRow
-                .padding(.horizontal, EchoesSpacing.md)
-
-            if store.dropDraft.visibility == .private {
-                passcodeField
+                modePicker
                     .padding(.horizontal, EchoesSpacing.md)
+
+                if store.dropDraft.isVoiceMode {
+                    voiceComposer
+                } else {
+                    textComposer
+                }
+
+                visibilityPicker
+                    .padding(.horizontal, EchoesSpacing.md)
+
+                timeLockRow
+                    .padding(.horizontal, EchoesSpacing.md)
+
+                if store.dropDraft.visibility == .private {
+                    passcodeField
+                        .padding(.horizontal, EchoesSpacing.md)
+                }
+
+                Spacer(minLength: 8)
+
+                submitButton
+                    .padding(.bottom, geometry.safeAreaInsets.bottom + 100)
             }
-
-            Spacer(minLength: 8)
-
-            submitButton
-                .padding(.bottom, EchoesSpacing.xl)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(EchoesColor.bgPrimary)
+        .background(EchoesColor.bgPrimary.ignoresSafeArea())
     }
 
     private var modePicker: some View {
@@ -54,7 +57,7 @@ struct DropView: View {
                 .foregroundStyle(EchoesColor.red)
                 .padding(.top, EchoesSpacing.lg)
 
-            waveform
+            WaveformVisualization()
 
             Text("00:00")
                 .font(.system(size: 50, weight: .regular, design: .rounded))
@@ -76,18 +79,6 @@ struct DropView: View {
                 .background(EchoesColor.bgTertiary)
                 .clipShape(RoundedRectangle(cornerRadius: EchoesRadius.md, style: .continuous))
         }
-        .padding(.horizontal, EchoesSpacing.md)
-    }
-
-    private var waveform: some View {
-        HStack(alignment: .center, spacing: 6) {
-            ForEach(0..<24, id: \.self) { index in
-                RoundedRectangle(cornerRadius: EchoesRadius.xs)
-                    .fill(index.isMultiple(of: 3) ? EchoesColor.gold : EchoesColor.gold.opacity(0.6))
-                    .frame(width: 4, height: CGFloat(8 + abs(12 - index) * 4))
-            }
-        }
-        .frame(height: 96)
         .padding(.horizontal, EchoesSpacing.md)
     }
 
@@ -150,16 +141,50 @@ struct DropView: View {
         Button {
             store.submitDrop()
         } label: {
-            Circle()
-                .fill(EchoesColor.gold)
-                .frame(width: 120, height: 120)
-                .overlay {
-                    Image(systemName: store.dropDraft.isVoiceMode ? "waveform" : "paperplane.fill")
-                        .font(.system(size: 34, weight: .medium))
-                        .foregroundStyle(Color.black.opacity(0.9))
-                }
+            ZStack {
+                Circle()
+                    .fill(EchoesColor.gold)
+                    .frame(width: 120, height: 120)
+                    .shadow(color: EchoesColor.gold.opacity(0.3), radius: 16, y: 8)
+                
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 36, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.85))
+            }
         }
         .buttonStyle(.plain)
         .accessibilityLabel("确认埋藏")
+    }
+}
+
+// MARK: - Waveform Visualization
+struct WaveformVisualization: View {
+    // 模拟音频波形分布 (中间高两侧低)
+    private let barHeights: [CGFloat] = [
+        12, 18, 28, 40, 52, 64, 76, 88,
+        96, 88, 76, 64, 52, 40, 28, 18,
+        12, 18, 28, 40, 52, 64, 76, 88
+    ]
+    
+    // 颜色映射 (根据高度使用不同金色层级)
+    private func goldColor(for height: CGFloat) -> Color {
+        switch height {
+        case 0..<30: return EchoesColor.gold400
+        case 30..<60: return EchoesColor.gold500
+        case 60..<80: return EchoesColor.gold600
+        default: return EchoesColor.gold700
+        }
+    }
+    
+    var body: some View {
+        HStack(alignment: .center, spacing: 4) {
+            ForEach(0..<24, id: \.self) { index in
+                RoundedRectangle(cornerRadius: EchoesRadius.xs)
+                    .fill(goldColor(for: barHeights[index]))
+                    .frame(width: 4, height: barHeights[index])
+            }
+        }
+        .frame(height: 100)
+        .padding(.horizontal, EchoesSpacing.md)
     }
 }

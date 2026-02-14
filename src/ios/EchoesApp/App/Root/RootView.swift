@@ -16,7 +16,7 @@ struct RootView: View {
                 MainShellView()
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EchoesColor.bgPrimary.ignoresSafeArea())
         .sheet(item: $store.modalRoute) { route in
             modalView(route)
@@ -53,41 +53,31 @@ private struct MainShellView: View {
     @EnvironmentObject private var store: AppStore
 
     var body: some View {
+        // 原生 TabView - iOS 26 自动获得悬浮椭圆形 Liquid Glass TabBar
+        // 不使用任何容器包裹，让 TabView 自己处理全屏布局
         TabView(selection: $store.selectedTab) {
-            MapHomeView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .tag(AppTab.map)
-                .tabItem {
-                    Label("首页", systemImage: "house")
-                }
-
-            PickupView()
-                .tag(AppTab.pickup)
-                .tabItem {
-                    Label("地图", systemImage: "map")
-                }
-
-            DropView()
-                .tag(AppTab.drop)
-                .tabItem {
-                    Label("埋藏", systemImage: "plus.circle.fill")
-                }
-
-            FootprintsView()
-                .tag(AppTab.footprints)
-                .tabItem {
-                    Label("足迹", systemImage: "figure.walk")
-                }
-
-            SettingsView()
-                .tag(AppTab.settings)
-                .tabItem {
-                    Label("设置", systemImage: "gearshape")
-                }
+            Tab(AppTab.map.title, systemImage: "house", value: AppTab.map) {
+                MapHomeView()
+            }
+            
+            Tab(AppTab.pickup.title, systemImage: "map", value: AppTab.pickup) {
+                PickupView()
+            }
+            
+            Tab(AppTab.drop.title, systemImage: "plus.circle.fill", value: AppTab.drop) {
+                DropView()
+            }
+            
+            Tab(AppTab.footprints.title, systemImage: "figure.walk", value: AppTab.footprints) {
+                FootprintsView()
+            }
+            
+            Tab(AppTab.settings.title, systemImage: "gearshape", value: AppTab.settings) {
+                SettingsView()
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .tint(EchoesColor.gold)
-        .toolbarBackground(EchoesColor.bgSecondary, for: .tabBar)
-        .toolbarBackground(.visible, for: .tabBar)
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .ignoresSafeArea()
     }
 }

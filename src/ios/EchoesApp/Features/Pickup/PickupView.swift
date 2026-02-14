@@ -5,52 +5,58 @@ struct PickupView: View {
     @State private var selectedID: UUID?
 
     var body: some View {
-        VStack(spacing: EchoesSpacing.md) {
-            Text("发现回响")
-                .font(EchoesFont.headline)
-                .foregroundStyle(EchoesColor.textPrimary)
-                .padding(.top, EchoesSpacing.lg)
+        GeometryReader { geometry in
+            VStack(spacing: EchoesSpacing.md) {
+                Text("发现回响")
+                    .font(EchoesFont.headline)
+                    .foregroundStyle(EchoesColor.textPrimary)
+                    .padding(.top, geometry.safeAreaInsets.top + EchoesSpacing.md)
 
-            if let echo = selectedEcho {
-                targetCard(echo)
+                if let echo = selectedEcho {
+                    targetCard(echo)
+                        .padding(.horizontal, EchoesSpacing.md)
+
+                    RadarView(
+                        showsEchoes: false,
+                        size: 220,
+                        centerSymbol: "location.north.fill"
+                    )
+                    .padding(.top, EchoesSpacing.sm)
+
+                    VStack(spacing: 2) {
+                        Text("距离")
+                            .font(EchoesFont.caption)
+                            .foregroundStyle(EchoesColor.textSecondary)
+                        Text("\(echo.distanceMeters)米")
+                            .font(.system(size: 50, weight: .bold, design: .rounded))
+                            .foregroundStyle(EchoesColor.textPrimary)
+                    }
+
+                    SignalBarsView(level: signalLevel(for: echo.distanceMeters))
+
+                    PrimaryButton(title: "解锁内容") {
+                        store.updateTracking(distance: echo.distanceMeters, title: echo.title)
+                        store.tapEcho(echo)
+                    }
                     .padding(.horizontal, EchoesSpacing.md)
+                    .padding(.top, EchoesSpacing.sm)
 
-                RadarView(
-                    showsEchoes: false,
-                    size: 220,
-                    centerSymbol: "location.north.fill"
-                )
-                .padding(.top, EchoesSpacing.sm)
-
-                VStack(spacing: 2) {
-                    Text("距离")
-                        .font(EchoesFont.caption)
+                    if store.nearbyEchoes.count > 1 {
+                        nextTargetButton
+                    }
+                    
+                    Spacer()
+                        .frame(height: geometry.safeAreaInsets.bottom + 100)
+                } else {
+                    Text("附近暂无可拾取回响")
+                        .font(EchoesFont.body)
                         .foregroundStyle(EchoesColor.textSecondary)
-                    Text("\(echo.distanceMeters)米")
-                        .font(.system(size: 50, weight: .bold, design: .rounded))
-                        .foregroundStyle(EchoesColor.textPrimary)
+                    Spacer()
                 }
-
-                SignalBarsView(level: signalLevel(for: echo.distanceMeters))
-
-                PrimaryButton(title: "解锁内容") {
-                    store.updateTracking(distance: echo.distanceMeters, title: echo.title)
-                    store.tapEcho(echo)
-                }
-                .padding(.horizontal, EchoesSpacing.md)
-                .padding(.top, EchoesSpacing.sm)
-
-                if store.nearbyEchoes.count > 1 {
-                    nextTargetButton
-                }
-            } else {
-                Text("附近暂无可拾取回响")
-                    .font(EchoesFont.body)
-                    .foregroundStyle(EchoesColor.textSecondary)
-                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(EchoesColor.bgPrimary)
+        .background(EchoesColor.bgPrimary.ignoresSafeArea())
         .onAppear {
             if selectedID == nil {
                 selectedID = store.nearbyEchoes.first?.id

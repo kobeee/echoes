@@ -1,11 +1,11 @@
 name: EchoesApp
 options:
   deploymentTarget:
-    iOS: "19.0"
+    iOS: "26.0"
 settings:
   base:
     SWIFT_VERSION: 6.0
-    IPHONEOS_DEPLOYMENT_TARGET: 19.0
+    IPHONEOS_DEPLOYMENT_TARGET: 26.0
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
     SUPPORTED_PLATFORMS: "iphonesimulator iphoneos"
@@ -24,6 +24,12 @@ targets:
       - Resources
     info:
       path: App/Info.plist
+      properties:
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIRequiresFullScreen: true
+        UILaunchScreen:
+          UIColorName: LaunchScreenBackground
     settings:
       base:
         SDKROOT: auto
@@ -34,7 +40,7 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UIUserInterfaceStyle: Dark
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        ENABLE_PREVIEWS: YES
+        ENABLE_PREVIEWS: NO
         CODE_SIGNING_ALLOWED: NO
     dependencies:
       - target: EchoesWidgets
@@ -51,6 +57,9 @@ targets:
       - Resources/Assets.xcassets
     info:
       path: Widgets/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
       base:
         SDKROOT: auto

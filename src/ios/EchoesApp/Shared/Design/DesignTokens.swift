@@ -1,18 +1,36 @@
 import SwiftUI
 
 enum EchoesColor {
+    // Backgrounds
     static let bgPrimary = Color(hex: 0x000000)
     static let bgSecondary = Color(hex: 0x1C1C1E)
     static let bgTertiary = Color(hex: 0x2C2C2E)
-    static let gold = Color(hex: 0xD4AA40)
+    
+    // Gold Scale (品牌色系)
+    static let gold100 = Color(hex: 0xF5ECD0)
+    static let gold200 = Color(hex: 0xEAD07A)
+    static let gold300 = Color(hex: 0xE0C46A)
+    static let gold400 = Color(hex: 0xD4AA40)
+    static let gold = Color(hex: 0xD4AA40)  // 主品牌色
     static let goldSoft = Color(hex: 0xEAD07A)
+    static let gold500 = Color(hex: 0xC4A052)
+    static let gold600 = Color(hex: 0xB89A4A)
+    static let gold700 = Color(hex: 0x9A7D3C)
+    
+    // Accent Colors
     static let teal = Color(hex: 0x00BFA5)
     static let purple = Color(hex: 0x8E6DAF)
     static let red = Color(hex: 0xFF453A)
+    
+    // Text Colors (符合 iOS Dark Mode 规范)
     static let textPrimary = Color(hex: 0xFFFFFF)
-    static let textSecondary = Color(hex: 0x98989F)
+    static let textSecondary = Color(hex: 0xEBEBF5).opacity(0.6)  // 视觉稿值
     static let textMuted = Color(hex: 0x6C6C74)
+    static let textGold = Color(hex: 0xD4AA40)
+    
+    // Borders
     static let border = Color(hex: 0x38383A)
+    static let borderGold = Color(hex: 0xD4AA40)
 }
 
 enum EchoesSpacing {

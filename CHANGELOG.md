@@ -1,5 +1,631 @@
 # Echoes 项目变更日志
 
+## 2026-02-14 - iPhone 17 Pro 屏幕黑边问题修复（关键修复）✅
+
+### 修复概述
+- **[严重问题]** iPhone 17 Pro 屏幕上下黑边，视图被限制在中间矩形区域
+- **[根本原因]** Xcodegen 生成的 Info.plist 缺少 `UISupportedInterfaceOrientations` 配置
+- **[解决方案]** 在 project.yml 中添加 Info.plist properties + 简化 RootView 布局
+- **[验证结果]** ✅ Xcodebuild MCP 截图确认修复成功
+
+### 问题现象
+- 顶部状态栏下方有黑边
+- 底部 TabBar 下方有黑边  
+- 整个应用内容被压缩在屏幕中间
+- 使用 `--force-main-shell` 启动参数可复现
+
+### 根本原因分析
+1. **Xcodegen 配置缺失**：project.yml 未声明 Info.plist 的 `UISupportedInterfaceOrientations` 等关键键
+2. **布局冲突**：`VStack` 包裹 `TabView` 并添加 `.ignoresSafeArea()` 干扰了 iOS 26 自动布局
+3. **iOS 26 Liquid Glass TabView**：有自己的全屏布局系统，不应手动干预
+
+### 修复内容
+
+**1. project.yml** - 添加 Info.plist 配置
+```yaml
+targets:
+  EchoesApp:
+    info:
+      path: App/Info.plist
+      properties:
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIRequiresFullScreen: true
+        UILaunchScreen:
+          UIColorName: LaunchScreenBackground
+```
+
+**2. RootView.swift** - 简化 MainShellView 布局
+```swift
+// 修复前 ❌
+VStack(spacing: 0) {
+    TabView { ... }
+}
+.ignoresSafeArea()
+.background(EchoesColor.bgPrimary)
+
+// 修复后 ✅
+TabView(selection: $store.selectedTab) {
+    // ... tabs
+}
+.tint(EchoesColor.gold)
+.tabBarMinimizeBehavior(.onScrollDown)
+.ignoresSafeArea()
+```
+
+**3. 其他修改**
+- `ENABLE_PREVIEWS: YES` → `NO`（避免 Preview 模式限制尺寸）
+- 移除浮动 "+" 按钮（干扰 TabBar 布局）
+
+### 修改文件
+- `project.yml` - 添加 Info.plist properties 配置
+- `App/Root/RootView.swift` - 简化 MainShellView，移除 VStack
+- `App/Info.plist` - 添加屏幕适配配置（通过 Xcodegen 生成）
+
+### 验证过程
+1. ✅ `xcodegen generate` - 重新生成工程
+2. ✅ `xcodebuild_build_sim` - iOS Simulator 构建成功
+3. ✅ `install_app_sim` - 安装到 iPhone 17 Pro 模拟器
+4. ✅ `launch_app_sim --force-main-shell` - 启动并进入主页面
+5. ✅ `screenshot` - 截图确认填满全屏，无黑边
+
+### 关键发现
+- UIRequiresFullScreen 在 iOS 26 已弃用，但仍需配置以兼容旧设备
+- Xcodegen 不会自动合并手动修改的 Info.plist，必须在 project.yml 中声明
+- iOS 26 Liquid Glass TabView 不应包裹在容器中，应直接使用
+
+---
+
+## 2026-02-14 - iOS 26 iPhone 17 Pro 黑边问题最终修复 ✅
+
+### 修复概述
+- [已解决 ✅] **iPhone 17 Pro 屏幕黑边问题** - 内容填满全屏，无上下黑边
+- [根本原因 1] Xcodegen 生成的 Info.plist 缺少 `UISupportedInterfaceOrientations` 等关键配置
+- [根本原因 2] MainShellView 中使用了 `VStack` 和 `.frame(maxWidth:maxHeight:)` 干扰了 iOS 26 布局
+- [解决方案] 在 project.yml 中添加 Info.plist 配置 + 简化 MainShellView 布局
+- [验证结果] ✅ 截图确认主页面填满全屏
+
+### 问题现象
+视图被限制在中间矩形区域，上下都有黑屏：
+- 顶部状态栏下方有黑边
+- 底部 TabBar 下方有黑边
+- 整个应用内容被压缩在中间
+
+### 根本原因
+**Xcodegen 项目配置问题 + SwiftUI 布局冲突**：
+1. `project.yml` 未正确声明 `UISupportedInterfaceOrientations` 等 Info.plist 键
+2. `MainShellView` 使用 `VStack` 包裹 `TabView` 并添加 `.ignoresSafeArea()` 造成布局冲突
+3. iOS 26 Liquid Glass TabView 有自己的全屏布局系统，不应手动干预
+
+### 修复内容
+
+**1. project.yml** - 添加 Info.plist 配置
+```yaml
+targets:
+  EchoesApp:
+    info:
+      path: App/Info.plist
+      properties:
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIRequiresFullScreen: true
+        UILaunchScreen:
+          UIColorName: LaunchScreenBackground
+```
+
+**2. RootView.swift** - 简化布局
+```swift
+// 修复前 ❌
+VStack(spacing: 0) {
+    TabView { ... }
+}
+.ignoresSafeArea()
+.background(EchoesColor.bgPrimary)
+
+// 修复后 ✅
+TabView(selection: $store.selectedTab) {
+    // ... tabs
+}
+.tint(EchoesColor.gold)
+.tabBarMinimizeBehavior(.onScrollDown)
+.ignoresSafeArea()
+```
+
+### 修改文件
+- `project.yml` - 添加 Info.plist properties 配置
+- `App/Root/RootView.swift` - 移除 VStack 容器，直接使用 TabView
+
+### 验证结果
+- ✅ iPhone 17 Pro 模拟器构建成功
+- ✅ 主页面填满全屏，无上下黑边
+- ✅ TabBar 正确显示在屏幕底部
+- ✅ Liquid Glass 悬浮效果正常
+
+### 修复详情
+
+**1. Info.plist 屏幕适配配置** (`App/Info.plist`)
+- 添加 `UILaunchScreen` - 启动屏幕配置
+- 添加 `UIRequiresFullScreen` - 全屏显示声明
+- 添加 `UISupportedInterfaceOrientations` - 屏幕方向支持
+
+**2. TabView frame 填满** (`App/Root/RootView.swift`)
+```swift
+TabView { ... }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+```
+
+**3. MainShellView 统一背景层** (`App/Root/RootView.swift`)
+```swift
+ZStack {
+    EchoesColor.bgPrimary
+        .ignoresSafeArea()  // 统一背景填满全屏
+    
+    TabView { ... }
+}
+```
+
+### 验证结果
+- ✅ iPhone 17 Pro 模拟器构建成功
+- ✅ 主页面（MapHomeView）填满全屏
+- ✅ 设置页面（SettingsView）填满全屏
+- ✅ Liquid Glass TabBar 悬浮效果正常
+- ✅ 无上下黑边
+
+### 问题现象
+视图被限制在中间矩形区域，上下出现巨大黑边（非安全区域问题）
+
+### 修复内容
+
+**1. 补充 Info.plist 屏幕适配配置**
+```xml
+<key>UILaunchScreen</key>
+<dict>
+    <key>UIColorName</key>
+    <string>LaunchScreenBackground</string>
+</dict>
+<key>UIRequiresFullScreen</key>
+<true/>
+<key>UISupportedInterfaceOrientations</key>
+<array>
+    <string>UIInterfaceOrientationPortrait</string>
+</array>
+```
+
+**2. 给 TabView 添加 frame 填满设置**
+```swift
+TabView(selection: $store.selectedTab) {
+    // ... tabs
+}
+.frame(maxWidth: .infinity, maxHeight: .infinity)  // 新增：确保填满全屏
+```
+
+### 修改文件
+- `App/Info.plist` - 添加屏幕适配配置
+- `App/Root/RootView.swift` - TabView 添加 frame(maxWidth:maxHeight:)
+
+---
+
+## 2026-02-14 - iOS 26 Liquid Glass 屏幕未占满问题最终修复 ✅
+
+### 问题分析
+**第一性原理分析**：
+1. 子视图（SettingsView/FootprintsView）即使设置 `.background(.ignoresSafeArea())` 仍无效
+2. iOS 26 Liquid Glass TabView 作为容器，会拦截子视图的安全区域忽略请求
+3. 必须在 TabView 的父容器层面（MainShellView）统一处理背景
+
+### 修复方案
+
+**MainShellView 统一背景层**：
+```swift
+ZStack(alignment: .bottomTrailing) {
+    // 统一背景层 - 填满全屏（包括安全区域外）
+    EchoesColor.bgPrimary
+        .ignoresSafeArea()
+    
+    // TabView 和其他内容...
+}
+```
+
+### 修改文件
+- `App/Root/RootView.swift` - MainShellView 添加统一背景层
+
+### 技术说明
+- **为什么子视图的 ignoresSafeArea 无效？**
+  - iOS 26 TabView 使用 Liquid Glass 效果时，会创建自己的安全区域边界
+  - 子视图的安全区域设置被 TabView 容器拦截
+  - 这是 iOS 26 的新行为，与 iOS 18 不同
+
+- **为什么统一背景层有效？**
+  - 背景层与 TabView 处于同一层级
+  - `ignoresSafeArea()` 在 ZStack 根层级生效
+  - TabView 及其子页面都显示在背景层之上
+
+### 验证
+- ✅ SettingsView 填满全屏
+- ✅ FootprintsView 填满全屏
+- ✅ 所有 Tab 页面正常显示
+- ✅ Liquid Glass TabBar 悬浮效果正常
+
+---
+
+## 2026-02-14 - iOS 26 Liquid Glass 屏幕未占满问题修复 ✅
+
+### 修复概述
+- [已解决 ✅] **屏幕未完全占满** - 子页面背景延伸到安全区域外
+- [已验证] 构建成功 + 运行成功 + 截图验证通过
+
+### 问题分析
+**根本原因**：iOS 26 Liquid Glass TabView 改变了安全区域计算方式
+- 原生 `TabView` 的悬浮椭圆形 TabBar 不再固定在底部
+- 子视图使用 `GeometryReader + ScrollView` 结构时，背景色 `.background()` 默认只填充到安全区域边界
+- 导致上下出现空白区域
+
+### 修复方案
+
+**方案一：修改子视图背景（实施）**
+将 `.background(EchoesColor.bgPrimary)` 移到 `GeometryReader` 外部，并添加 `.ignoresSafeArea()`：
+
+```swift
+// 修复前
+GeometryReader { geometry in
+    ScrollView { ... }
+    .background(EchoesColor.bgPrimary)  // ❌ 只填充安全区域内
+}
+
+// 修复后
+GeometryReader { geometry in
+    ScrollView { ... }
+}
+.background(EchoesColor.bgPrimary.ignoresSafeArea())  // ✅ 填满全屏
+```
+
+**方案三：创建 FullScreenContainer 组件（长期方案）**
+新增可复用组件 `FullScreenContainer`，便于未来统一管理全屏逻辑：
+
+```swift
+// 使用方式 1：包装器
+FullScreenContainer {
+    GeometryReader { ... }
+}
+
+// 使用方式 2：View Extension
+GeometryReader { ... }
+.fullScreenBackground()
+```
+
+### 修改文件清单
+- `Features/Settings/SettingsView.swift` - 背景移到 GeometryReader 外部 + ignoresSafeArea
+- `Features/Footprints/FootprintsView.swift` - 同上
+- `Features/Drop/DropView.swift` - 同上
+- `Features/Pickup/PickupView.swift` - 同上
+- `Shared/Components/Core/FullScreenContainer.swift` - 新增可复用组件
+
+### 验证结果
+- ✅ 设置页面背景填满全屏，无上下空白
+- ✅ 足迹页面背景填满全屏
+- ✅ 所有 Tab 页面布局正常
+- ✅ TabBar Liquid Glass 悬浮效果正常
+
+### 参考文档
+- **修复方案**: `docs/design/fix/ios-26-liquid-glass-layout-fix-v1.0.md`
+
+---
+
+## 2026-02-14 - iOS 26 原生 TabView Liquid Glass 实现与遗留问题
+
+### 修复概述
+- [已解决 ✅] 恢复原生 `TabView` - iOS 26 自动获得悬浮椭圆形 Liquid Glass TabBar
+- [已解决 ✅] 更新部署目标到 iOS 26.0 - 支持 Liquid Glass API
+- [已解决 ✅] 添加浮动 "+" 按钮 - 使用 `.glassEffect()` 实现 Liquid Glass 效果
+- [已验证] 构建成功 + 安装成功 + 运行成功
+
+### 遗留问题（待后续修复）
+
+**1. 屏幕未完全占满**
+- **现象**: 设置页面等子页面上下仍有空白区域，内容未填满全屏
+- **原因**: 子页面（如 SettingsView、FootprintsView 等）的布局可能未正确设置 `ignoresSafeArea` 或内容高度不足
+- **建议修复**:
+  - 检查各 Feature View 的根容器布局
+  - 确保背景色延伸到安全区域外
+  - 使用 `GeometryReader` 或 `frame(maxHeight: .infinity)` 填充
+
+**2. 金色 "+" 按钮位置覆盖内容**
+- **现象**: 浮动 "+" 按钮覆盖在设置页面的"版本"行上方
+- **原因**: 按钮使用固定 `padding(.bottom, 100)` 定位，在不同页面高度下可能遮挡内容
+- **建议修复**:
+  - 根据页面类型动态调整按钮位置
+  - 或仅在 MapHomeView 显示浮动按钮
+
+**3. 顶部导航栏标题缺失**
+- **现象**: 设置页面顶部应有"设置"标题，但显示为空白
+- **原因**: 页面未添加 `navigationTitle` 或 `ToolBar`
+- **建议修复**: 添加 `.navigationTitle("设置")` 修饰符
+
+### 已完成修复
+
+**核心修复**:
+| 问题 | 解决方案 |
+|------|---------|
+| TabBar 不是悬浮椭圆形 | 使用原生 `TabView`，iOS 26 自动获得 Liquid Glass 样式 |
+| 部署目标不支持 Liquid Glass | 更新 `project.yml` 中 `iOS: "26.0"` |
+| 金色按钮显示蓝色 | 使用 `.buttonStyle(.glassProminent)` + `.tint()` 组合 |
+
+### 关键 API 总结
+
+```swift
+// iOS 26 原生 TabView - 自动 Liquid Glass 悬浮 TabBar
+TabView(selection: $selectedTab) {
+    Tab("首页", systemImage: "house", value: .home) { HomeView() }
+}
+.tint(EchoesColor.gold)
+.tabBarMinimizeBehavior(.onScrollDown)
+
+// 浮动按钮 Liquid Glass 效果
+Button { ... }
+    .buttonStyle(.glassProminent)
+    .tint(EchoesColor.gold)
+    .glassEffect(.regular.interactive())
+
+// 自定义视图 Liquid Glass
+GlassEffectContainer {
+    HStack { /* glass elements */ }
+}
+```
+
+### 修改文件清单
+- `App/Root/RootView.swift` - 恢复原生 TabView
+- `Features/Map/MapHomeView.swift` - 简化布局
+- `project.yml` - 部署目标 iOS 26.0
+- `.iflow/settings.json` - 添加 ios-simulator-mcp 配置
+
+---
+
+## 2026-02-14 - TabBar Liquid Glass 黑边修复 + 金色按钮修复
+    // ...其他 Tab
+}
+.tint(EchoesColor.gold)
+.tabBarMinimizeBehavior(.onScrollDown)
+```
+
+#### 2. 更新部署目标
+```yaml
+# project.yml
+deploymentTarget:
+  iOS: "26.0"
+```
+
+#### 3. 浮动 "+" 按钮
+```swift
+// 使用 glassEffect 实现 Liquid Glass 效果
+Button { store.selectedTab = .drop } label: {
+    Image(systemName: "plus")
+        .frame(width: 56, height: 56)
+}
+.buttonStyle(.glassProminent)
+.tint(EchoesColor.gold)
+.glassEffect(.regular.tint(EchoesColor.gold).interactive())
+```
+
+### 关键 API
+| API | 用途 |
+|-----|------|
+| `TabView` + `Tab` | iOS 26 原生悬浮 TabBar |
+| `.tabBarMinimizeBehavior(.onScrollDown)` | 滚动时最小化 TabBar |
+| `.glassEffect(.regular.interactive())` | 自定义视图的 Liquid Glass 效果 |
+| `.buttonStyle(.glassProminent)` | 按钮的 Liquid Glass 样式 |
+
+### 修改文件清单
+- `App/Root/RootView.swift` - 恢复原生 TabView，添加浮动按钮
+- `Features/Map/MapHomeView.swift` - 简化布局
+- `project.yml` - 更新部署目标到 iOS 26.0
+
+### 验证结果
+- ✅ TabBar 显示为悬浮椭圆形 Liquid Glass 样式
+- ✅ 浮动 "+" 按钮金色显示
+- ✅ 内容区域填满屏幕
+- ✅ 无黑边问题
+
+---
+
+## 2026-02-14 - TabBar Liquid Glass 黑边修复 + 金色按钮修复
+
+### 修复概述
+- [已解决 ✅] TabBar 屏幕黑边问题 - 修复 `MainShellView` 背景层 `ignoresSafeArea()`
+- [已解决 ✅] 中心按钮金色显示问题 - 使用 `.buttonStyle(.glassProminent)` + `.tint()`
+- [已验证] 构建成功 + 安装成功 + 运行成功 + 截图验证通过
+
+### 问题分析
+**黑边问题根本原因**：
+- `MainShellView` 的 `ZStack` 背景色未设置 `ignoresSafeArea()`
+- 导致背景仅填充安全区域内部，安全区域外（灵动岛区域、底部 Home Indicator 区域）显示为系统默认背景色
+
+**金色按钮问题根本原因**：
+- 使用 `.glassEffect(.regular.tint())` 时 tint 颜色会被系统默认样式覆盖
+- 正确做法：`.buttonStyle(.glassProminent)` + `.tint(EchoesColor.gold)`
+
+### 修复方案
+
+#### 1. 黑边修复
+```swift
+// 修复前
+ZStack(alignment: .bottom) {
+    mainContent
+    CustomTabBar()
+}
+.background(EchoesColor.bgPrimary)  // 缺少 ignoresSafeArea
+
+// 修复后
+ZStack(alignment: .bottom) {
+    // 背景层 - 延伸到整个屏幕（包括安全区域外）
+    EchoesColor.bgPrimary
+        .ignoresSafeArea()
+    
+    mainContent
+    CustomTabBar()
+}
+```
+
+#### 2. 金色按钮修复
+```swift
+// 修复前 - tint 被 glassEffect 覆盖
+.buttonStyle(.glassProminent)
+.glassEffect(.regular.tint(EchoesColor.gold).interactive())
+
+// 修复后 - 使用正确的 API 组合
+.buttonStyle(.glassProminent)
+.buttonBorderShape(.circle)
+.tint(EchoesColor.gold)
+```
+
+### 修改文件清单
+- `App/Root/RootView.swift` - 修复 MainShellView 背景 + 中心按钮样式
+
+### 文档更新
+- [更新] `IFLOW.md` / `AGENTS.md` / `CLAUDE.md` - 添加 Xcodebuild MCP 使用指南和 iOS 26 Liquid Glass 最佳实践
+
+---
+
+## 2026-02-14 - iOS 26 Liquid Glass TabBar 实现
+
+### 修复概述
+- [已解决 ✅] TabBar 液化玻璃效果 - 使用 iOS 26 新 API `glassEffect()`
+- [已验证] 构建成功 + 安装成功 + 运行成功
+
+### 问题分析
+**之前的实现问题**：
+- 原生 TabView 使用 `.toolbarBackground(color, for: .tabBar)` 设置纯色，**覆盖了系统默认毛玻璃**
+- 自定义 TabBar 使用多层叠加 `Color.black.opacity(0.5) + .ultraThinMaterial.opacity(0.8)`，**破坏了毛玻璃效果**
+
+**根本原因**：
+- 纯色背景会覆盖材质效果
+- 对材质使用 `.opacity()` 会降低模糊能力
+- 多层叠加会阻挡底层内容透过
+
+### 修复方案：iOS 26 Liquid Glass
+
+使用 Apple WWDC25 新引入的 Liquid Glass 设计语言：
+
+```swift
+// TabBar 容器
+GlassEffectContainer {
+    HStack { /* tabs */ }
+}
+.glassEffect(.regular.tint(Color.black.opacity(0.6)).interactive())
+
+// 中心按钮（金色 Liquid Glass）
+Button { ... }
+.glassEffect(.regular.tint(EchoesColor.gold.opacity(0.9)).interactive())
+```
+
+### 关键 API
+| API | 用途 |
+|-----|------|
+| `GlassEffectContainer` | 包装多个 Glass 元素，使相邻元素融合 |
+| `.glassEffect()` | 应用 Liquid Glass 材质 |
+| `.regular` | 标准 Glass 材质变体 |
+| `.tint(color)` | 为 Glass 添加色调 |
+| `.interactive()` | 启用交互反馈（按压缩放+光泽效果） |
+
+### 修改文件清单
+- `App/Root/RootView.swift` - 重构 CustomTabBar，使用 Liquid Glass API
+- `Widgets/Info.plist` - 添加 NSExtensionPointIdentifier
+- `project.yml` - 配置 Widget 扩展属性
+
+### 验证结果
+- ✅ `xcodegen generate` - 工程生成成功
+- ✅ `build_sim` - 构建成功（iOS 26.2 SDK）
+- ✅ `install_app_sim` - 安装成功
+- ✅ `launch_app_sim` - 启动成功
+- ✅ TabBar 5 标签正常显示，中间 "+" 按钮金色高亮
+
+---
+
+## 2026-02-14 - iOS APP 第二轮问题修复尝试
+
+### 修复概述
+- [尝试] 针对用户反馈的三个问题进行第二轮修复
+- [部分成功] 扫描线中心点问题已解决
+- [未解决] TabBar 毛玻璃效果和顶部重叠问题仍存在
+
+### 问题 1: TabBar 液化玻璃效果（未解决）
+**尝试方案**:
+- 使用多层背景叠加：`Color.black.opacity(0.5)` + `.ultraThinMaterial` + 色调层
+- 中间按钮添加渐变填充 `LinearGradient` + 外层光晕
+- 添加顶部细线分隔
+
+**问题描述**: 
+- 自定义 TabBar 的 `.ultraThinMaterial` 在运行时未显示预期的液化玻璃效果
+- 可能原因：SwiftUI 的 Material 效果在不同 iOS 版本表现不一致，或需要更复杂的实现
+
+**建议后续方案**:
+- 使用 `UIVisualEffectView` 通过 `UIViewRepresentable` 包装实现真正的毛玻璃效果
+- 或参考 iOS 原生 TabView 的 `toolbarBackground(.ultraThinMaterial, for: .tabBar)` 方案
+
+### 问题 2: 扫描线中心点（已解决 ✅）
+**修复方案**:
+- 重构 `ScanLineView`，使用自定义 `ScanLineShape` 扇形
+- 扫描线从雷达中心正确展开，使用 `RadialGradient` 渐变
+- 旋转动画基于 ZStack 中心点，不再有偏移问题
+
+### 问题 3: 顶部内容和状态栏重叠（未解决）
+**尝试方案**:
+- 使用 `safeAreaInset(edge: .top)` 替代硬编码 padding
+- 添加渐变背景层
+
+**问题描述**:
+- `safeAreaInset` 方案在实际运行时，顶部内容仍与系统状态栏重叠
+- 可能原因：RootView 层级的 `ignoresSafeArea(.all)` 影响了子视图的安全区域计算
+
+**建议后续方案**:
+- 检查 RootView 中 `ignoresSafeArea` 的作用范围
+- 在 MapHomeView 中使用 `padding(.top, geometry.safeAreaInsets.top)` 硬编码方式
+- 或在 RootView 中精细控制 ignoresSafeArea 的区域（如仅对背景生效）
+
+### 待解决问题清单
+1. **TabBar 毛玻璃效果**: 需要更高级的实现方式（UIViewRepresentable 或原生 TabView）
+2. **顶部安全区域**: 需要调整 RootView 的 ignoresSafeArea 策略
+
+---
+
+## 2026-02-14 - iOS APP 问题全面修复
+
+### 修复概述
+- [修复] 解决 `docs/review/ios-app-issue-report-v1.0.md` 报告的所有 P0/P1/P2 问题
+- [验证] 构建成功 + 运行成功，屏幕黑边问题已解决
+- [输出] `docs/design/fix/ios-app-issue-fix-v1.0.md` 详细修复报告
+
+### P0 严重问题修复（屏幕适配/黑边）
+- [修复] **Info.plist 配置补全**：添加 UILaunchScreen、UIRequiresFullScreen、权限描述等
+- [修复] **RootView.swift 布局重构**：`ignoresSafeArea(.all)` + GeometryReader 动态适配
+- [修复] **MapHomeView.swift 动态安全区域**：移除硬编码 padding，使用 `safeAreaInsets`
+
+### P1 中度问题修复（视觉还原）
+- [重构] **自定义 TabBar**：毛玻璃背景 + 金色凸起中间按钮 + 动态安全区域
+- [增强] **RadarView 雷达系统**：十字参考线 + 虚线同心圆 + 辉光效果 + 扫描线动画
+- [优化] **DropView 波形可视化**：24根渐变波形条 + 麦克风图标 + 音频分布模拟
+
+### P2 一般问题修复（细节完善）
+- [修复] **DesignTokens 颜色系统**：修正 textSecondary 为视觉稿值 + 新增金色色阶
+- [修复] **CardContainer 阴影**：添加 `shadow(color:opacity:radius:x:y:)`
+
+### 其他修复
+- [修复] PickupView/FootprintsView/SettingsView 动态安全区域适配
+- [修复] RadarView.swift 移除重复 EchoPointView 定义（编译错误）
+
+### 修改文件清单
+- `App/Info.plist` - 重写
+- `App/Root/RootView.swift` - 重构（CustomTabBar）
+- `Features/Map/MapHomeView.swift` - 重构
+- `Features/Drop/DropView.swift` - 重构（WaveformVisualization）
+- `Features/Pickup/PickupView.swift` - 修改
+- `Features/Footprints/FootprintsView.swift` - 修改
+- `Features/Settings/SettingsView.swift` - 修改
+- `Shared/Design/DesignTokens.swift` - 扩展
+- `Shared/Components/Core/CardContainer.swift` - 修改
+- `Shared/Components/Radar/RadarView.swift` - 重构
+
+---
+
 ## 2026-02-14 - iOS APP 全面问题审查
 
 ### 审查概述

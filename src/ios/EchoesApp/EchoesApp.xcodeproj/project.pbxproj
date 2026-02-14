@@ -13,6 +13,7 @@
 		114FCEFE8A9F7F6930BAD721 /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA534664276549854377DD09 /* RadarView.swift */; };
 		11733B7882F9F1E37C561153 /* SignalBarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E736091EFC9209D985E470 /* SignalBarsView.swift */; };
 		119D11121AB9C65A28DF6701 /* PickupTrackingAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243A0A9EB599AAF18B2BA383 /* PickupTrackingAttributes.swift */; };
+		15ED3D412880BCF577C9D83F /* FullScreenContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB24D45275C5CD731E70171F /* FullScreenContainer.swift */; };
 		1D61ADB6275A21B06CEF1274 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F5181F9E1720454F4628E /* RootView.swift */; };
 		21B5938AD9E0B00036D066B7 /* EchoesIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970EB4BB8DB7332B7C59AFF5 /* EchoesIntents.swift */; };
 		24C4FBC9B569902719214D2B /* PasscodeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C54CDC11441D1130E2A08A /* PasscodeSheet.swift */; };
@@ -20,6 +21,7 @@
 		2897FCECB0CE303774907707 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDADEF7B59130B2E110982 /* CardContainer.swift */; };
 		3087B0747042EE009D46B354 /* EchoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DD11509DD062C25CA629F2 /* EchoModels.swift */; };
 		350186FE3FA6C842D66AAA47 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521600C06555B25DF1213E70 /* PrimaryButton.swift */; };
+		3D7092CDFBAF51BA77E8A915 /* FullScreenContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB24D45275C5CD731E70171F /* FullScreenContainer.swift */; };
 		4A4E4652D23CB40122256F23 /* MapHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF600AC7F82DB674B96CF3EA /* MapHomeView.swift */; };
 		505252C2976E730428EAAE3D /* EchoContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FD3209025E609F2998E1C3 /* EchoContentView.swift */; };
 		513FD0DD33971A29B8EDEF3A /* TimeLockLockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0166B016DA6F211480157F8A /* TimeLockLockedView.swift */; };
@@ -124,6 +126,7 @@
 		D7C4FD8F03D30C673C04FA53 /* DropSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSuccessView.swift; sourceTree = "<group>"; };
 		DF3C449B15EE8D9D2A181DAE /* RecoveryKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryKeyView.swift; sourceTree = "<group>"; };
 		E92E15FF394A4946FE65F9EC /* EchoesApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EchoesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB24D45275C5CD731E70171F /* FullScreenContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenContainer.swift; sourceTree = "<group>"; };
 		EDA045BE8EF470E0AE739EA1 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		F1E860ED39BAD39C86026C38 /* EchoesAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesAppTests.swift; sourceTree = "<group>"; };
 		F636A23616C971D92180766F /* BlackBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackBoxView.swift; sourceTree = "<group>"; };
@@ -291,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				18BDADEF7B59130B2E110982 /* CardContainer.swift */,
+				EB24D45275C5CD731E70171F /* FullScreenContainer.swift */,
 				521600C06555B25DF1213E70 /* PrimaryButton.swift */,
 			);
 			path = Core;
@@ -502,6 +506,7 @@
 				8EEB179FA644AF4715CF622D /* EchoesApp.swift in Sources */,
 				21B5938AD9E0B00036D066B7 /* EchoesIntents.swift in Sources */,
 				8F99B12F5816ECF50BB95793 /* FootprintsView.swift in Sources */,
+				15ED3D412880BCF577C9D83F /* FullScreenContainer.swift in Sources */,
 				ECF3072982BE1005C9AAF51E /* Haptics.swift in Sources */,
 				27CF28EA073C45510A394430 /* LaunchView.swift in Sources */,
 				4A4E4652D23CB40122256F23 /* MapHomeView.swift in Sources */,
@@ -535,6 +540,7 @@
 				640215C9E2DDE2231E4C64C7 /* EchoPointView.swift in Sources */,
 				C1774E577A170CDF153736EA /* EchoesIntents.swift in Sources */,
 				FE46835198EBB3655A1A97A5 /* EchoesWidgetsBundle.swift in Sources */,
+				3D7092CDFBAF51BA77E8A915 /* FullScreenContainer.swift in Sources */,
 				A81FD8564A01C53A87CE8E0D /* Haptics.swift in Sources */,
 				83A68E4336AD7EDD7D08279F /* MockRepositories.swift in Sources */,
 				AFBAC779691CEAE47C1B8533 /* PickupActivityManager.swift in Sources */,
@@ -568,7 +574,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
+				ENABLE_PREVIEWS = NO;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -707,7 +713,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 19.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -772,7 +778,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 19.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -791,7 +797,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_PREVIEWS = YES;
+				ENABLE_PREVIEWS = NO;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;

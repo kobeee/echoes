@@ -16,5 +16,6 @@ struct CardContainer<Content: View>: View {
                 .stroke(EchoesColor.border, lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: EchoesRadius.md, style: .continuous))
+        .shadow(color: Color.black.opacity(0.25), radius: 8, x: 0, y: 4)
     }
 }

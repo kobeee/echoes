@@ -9,22 +9,29 @@ struct SettingsView: View {
     @State private var vibration = true
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: EchoesSpacing.md) {
-                header
-                profileCard
-                proCard
-                sectionTitle("隐私")
-                privacySection
-                sectionTitle("通知")
-                notificationSection
-                sectionTitle("关于")
-                aboutSection
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading, spacing: EchoesSpacing.md) {
+                    header
+                        .padding(.top, geometry.safeAreaInsets.top)
+                    profileCard
+                    proCard
+                    sectionTitle("隐私")
+                    privacySection
+                    sectionTitle("通知")
+                    notificationSection
+                    sectionTitle("关于")
+                    aboutSection
+                    
+                    // 为 TabBar 预留空间
+                    Spacer()
+                        .frame(height: geometry.safeAreaInsets.bottom + 100)
+                }
+                .padding(EchoesSpacing.md)
             }
-            .padding(EchoesSpacing.md)
-            .padding(.bottom, EchoesSpacing.lg)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(EchoesColor.bgPrimary)
+        .background(EchoesColor.bgPrimary.ignoresSafeArea())
     }
 
     private var header: some View {
@@ -34,7 +41,6 @@ struct SettingsView: View {
                 .foregroundStyle(EchoesColor.textPrimary)
             Spacer()
         }
-        .padding(.top, EchoesSpacing.sm)
     }
 
     private var profileCard: some View {
