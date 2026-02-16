@@ -2,7 +2,7 @@
   "mcpServers": {
     "pencil": {
       "type": "stdio",
-      "command": "/Users/elvis/.vscode/extensions/highagency.pencildev-0.6.23/out/mcp-server-darwin-x64",
+      "command": "/Users/elvis/.vscode/extensions/highagency.pencildev-0.6.24/out/mcp-server-darwin-x64",
       "args": [
         "--app",
         "visual_studio_code"
