@@ -7,31 +7,29 @@ struct SettingsView: View {
     @State private var localReview = false
     @State private var nearbyNotify = true
     @State private var vibration = true
+    
+    let onOpenRecoveryKey: () -> Void
+    let onOpenProSubscription: () -> Void
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack(alignment: .leading, spacing: EchoesSpacing.md) {
-                    header
-                        .padding(.top, geometry.safeAreaInsets.top)
-                    profileCard
-                    proCard
-                    sectionTitle("隐私")
-                    privacySection
-                    sectionTitle("通知")
-                    notificationSection
-                    sectionTitle("关于")
-                    aboutSection
-                    
-                    // 为 TabBar 预留空间
-                    Spacer()
-                        .frame(height: geometry.safeAreaInsets.bottom + 100)
-                }
-                .padding(EchoesSpacing.md)
+        ScrollView {
+            VStack(alignment: .leading, spacing: EchoesSpacing.md) {
+                header
+                profileCard
+                proCard
+                sectionTitle("隐私")
+                privacySection
+                sectionTitle("通知")
+                notificationSection
+                sectionTitle("关于")
+                aboutSection
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(EchoesSpacing.md)
+            .padding(.bottom, 120)
         }
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .contentMargins(.top, EchoesSpacing.md, for: .scrollContent)
+        .scrollIndicators(.hidden)
+        .background(EchoesColor.bgPrimary)
     }
 
     private var header: some View {
@@ -61,7 +59,7 @@ struct SettingsView: View {
                 Spacer()
             }
             .onTapGesture {
-                store.modalRoute = .recoveryKey
+                onOpenRecoveryKey()
             }
         }
     }
@@ -87,7 +85,7 @@ struct SettingsView: View {
                     .foregroundStyle(EchoesColor.gold)
             }
             .onTapGesture {
-                store.modalRoute = .proSubscription
+                onOpenProSubscription()
             }
         }
         .overlay(

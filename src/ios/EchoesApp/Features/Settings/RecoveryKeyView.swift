@@ -2,8 +2,8 @@ import SwiftUI
 import UIKit
 
 struct RecoveryKeyView: View {
-    @EnvironmentObject private var store: AppStore
     @State private var copied = false
+    let onClose: () -> Void
 
     private let key = "A7K2-M9X4-P3L8-W6N1"
 
@@ -11,7 +11,7 @@ struct RecoveryKeyView: View {
         VStack(spacing: EchoesSpacing.md) {
             HStack {
                 Button {
-                    store.modalRoute = nil
+                    onClose()
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(EchoesColor.textPrimary)
@@ -69,12 +69,12 @@ struct RecoveryKeyView: View {
             }
 
             SecondaryButton(title: "我已安全备份") {
-                store.modalRoute = nil
+                onClose()
             }
 
             Spacer()
         }
         .padding(EchoesSpacing.md)
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .background(EchoesColor.bgPrimary)
     }
 }

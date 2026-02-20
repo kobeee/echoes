@@ -2,14 +2,16 @@ import SwiftUI
 
 struct DropView: View {
     @EnvironmentObject private var store: AppStore
+    let onSuccess: (String) -> Void
 
     var body: some View {
-        GeometryReader { geometry in
+        ScrollView {
             VStack(spacing: EchoesSpacing.md) {
                 Text("创建回响")
                     .font(EchoesFont.headline)
                     .foregroundStyle(EchoesColor.textPrimary)
-                    .padding(.top, geometry.safeAreaInsets.top + EchoesSpacing.md)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, EchoesSpacing.sm)
 
                 modePicker
                     .padding(.horizontal, EchoesSpacing.md)
@@ -31,14 +33,15 @@ struct DropView: View {
                         .padding(.horizontal, EchoesSpacing.md)
                 }
 
-                Spacer(minLength: 8)
-
                 submitButton
-                    .padding(.bottom, geometry.safeAreaInsets.bottom + 100)
+                    .padding(.top, EchoesSpacing.lg)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(EchoesSpacing.md)
+            .padding(.bottom, 120)
         }
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .contentMargins(.top, EchoesSpacing.md, for: .scrollContent)
+        .scrollIndicators(.hidden)
+        .background(EchoesColor.bgPrimary)
     }
 
     private var modePicker: some View {
@@ -139,7 +142,9 @@ struct DropView: View {
 
     private var submitButton: some View {
         Button {
+            let title = store.dropDraft.title
             store.submitDrop()
+            onSuccess(title)
         } label: {
             ZStack {
                 Circle()
@@ -157,16 +162,13 @@ struct DropView: View {
     }
 }
 
-// MARK: - Waveform Visualization
 struct WaveformVisualization: View {
-    // 模拟音频波形分布 (中间高两侧低)
     private let barHeights: [CGFloat] = [
         12, 18, 28, 40, 52, 64, 76, 88,
         96, 88, 76, 64, 52, 40, 28, 18,
         12, 18, 28, 40, 52, 64, 76, 88
     ]
     
-    // 颜色映射 (根据高度使用不同金色层级)
     private func goldColor(for height: CGFloat) -> Color {
         switch height {
         case 0..<30: return EchoesColor.gold400

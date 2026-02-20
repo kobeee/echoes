@@ -464,13 +464,123 @@ targets:
 4. ⏳ 完善动画细节和微交互
 5. ⏳ 进行全面的设备测试 (iPhone 17 Pro, iPhone 16 Pro Max, etc.)
 6. ⏳ 准备 App Store 上架材料
-1. 定义页面间转场动效规范
-2. 补充页面内状态变体（文字便签模式、足迹空状态）
-3. 开始 SwiftUI 开发实现
 
 ---
 
-## 八、Xcodebuild MCP 使用指南
+## 九、APP交互逻辑说明
+
+### 9.1 启动流程
+
+```
+App启动
+    ↓
+LaunchView (品牌动画)
+    ↓
+检查权限状态
+    ├── 未授权 → PermissionFlowView (权限引导流程)
+    │               ├── 位置权限
+    │               ├── 通知权限
+    │               └── 麦克风权限
+    │               ↓
+    │           授权完成 → MainShellView
+    │
+    └── 已授权 → MainShellView (主壳)
+```
+
+**启动参数**:
+- `--force-main-shell`: 跳过权限流程，直接进入主界面（用于模拟器测试）
+
+### 9.2 Tab导航结构
+
+MainShellView 使用原生 `TabView`，包含5个Tab：
+
+| 顺序 | Tab名称 | 视图 | 系统图标 |
+|------|---------|------|----------|
+| 1 | 首页 | MapHomeView | house |
+| 2 | 地图 | PickupView | map |
+| 3 | 埋藏 | DropView | plus.circle.fill |
+| 4 | 足迹 | FootprintsView | figure.walk |
+| 5 | 设置 | SettingsView | gearshape |
+
+**代码位置**: `App/Root/RootView.swift` - MainShellView
+
+### 9.3 各Tab页面交互详情
+
+#### Tab 1: 首页 (MapHomeView)
+- 雷达扫描动画 (RadarView)
+- "发现附近的回响"卡片: 点击后切换到Pickup流程
+- 右上角红色感叹号: SOS入口（进入BlackBoxView全屏页）
+
+#### Tab 2: 地图 (PickupView)
+- 目标卡片: 显示当前锁定的Echo
+- 指南针雷达: 指向目标方向
+- 距离显示 + 信号强度条
+- "解锁内容"按钮: 触发 `store.tapEcho(echo)`
+
+**点击"解锁内容"后的分支逻辑**:
+```
+点击"解锁内容"
+    ↓
+store.tapEcho(echo)
+    ├── echo.isTimeLocked == true → TimeLockLockedView (Sheet)
+    ├── echo.visibility == .private → PasscodeSheet (Sheet) → EchoContentView
+    └── 其他 (public) → EchoContentView (Sheet)
+```
+
+**Mock数据中的Echo类型** (`MockRepositories.swift`):
+| 名称 | 距离 | 类型 | 口令 |
+|------|------|------|------|
+| 给未来的信 | 0m | text | 无 |
+| 语音回响 | 15m | voice | 1024 |
+| 加密时间胶囊 | 50m | text+时间锁 | 无 |
+
+#### Tab 3: 埋藏 (DropView)
+- 录制按钮: 开始/停止录音
+- 波形可视化: 24根波形条
+- "公开/加密"切换
+- 录制完成 → DropSuccessView (Sheet)
+
+#### Tab 4: 足迹 (FootprintsView)
+- 统计卡片: 埋下数量、拾取数量、天数
+- 时间线: 历史记录列表
+
+#### Tab 5: 设置 (SettingsView)
+- Profile卡片: Device ID + Recovery Key
+- Pro入口 → ProSubscriptionView (Sheet)
+- 隐私设置: Toggle开关
+- 通知设置: Toggle开关
+- 关于信息
+
+### 9.4 Sheet页面汇总
+
+| Sheet | 入口 | 说明 |
+|-------|------|------|
+| DropSuccessView | DropView录制完成 | 埋藏成功确认 |
+| EchoContentView | PickupView解锁 | 播放/查看Echo内容 |
+| PasscodeSheet | PickupView解锁加密Echo | 输入4位口令 |
+| TimeLockLockedView | PickupView解锁时间锁Echo | 显示倒计时 |
+| SOSCompleteView | BlackBoxView完成 | SOS完成确认 |
+| RecoveryKeyView | SettingsView | 密钥查看/备份 |
+| ProSubscriptionView | SettingsView | Pro订阅详情 |
+
+### 9.5 全屏页面
+
+- **BlackBoxView**: SOS紧急模式，入口在首页右上角红色感叹号
+- 完成后弹出 SOSCompleteView (Sheet)
+
+### 9.6 状态管理 (AppStore)
+
+**核心状态** (`Shared/State/AppStore.swift`):
+- `phase`: AppPhase (.launch / .permissions / .main)
+- `selectedTab`: AppTab (当前Tab)
+- `modalRoute`: ModalRoute? (Sheet路由)
+- `fullScreenRoute`: 全屏路由
+- `echoes`: [EchoItem] (Echo列表)
+- `nearbyEchoes`: [EchoItem] (附近Echo ≤500m)
+
+---
+
+## 十、Xcodebuild MCP 使用指南
 
 ### 8.1 概述
 Xcodebuild MCP 是一个 AI 驱动的 Xcode 自动化工具，允许 AI 助手自主构建、测试和调试 iOS 应用。

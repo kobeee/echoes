@@ -2,12 +2,13 @@ import SwiftUI
 
 struct ProSubscriptionView: View {
     @EnvironmentObject private var store: AppStore
+    let onClose: () -> Void
 
     var body: some View {
         VStack(spacing: EchoesSpacing.md) {
             HStack {
                 Button {
-                    store.modalRoute = nil
+                    onClose()
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(EchoesColor.textPrimary)
@@ -57,7 +58,7 @@ struct ProSubscriptionView: View {
             Spacer()
         }
         .padding(EchoesSpacing.md)
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .background(EchoesColor.bgPrimary)
     }
 
     private func feature(_ title: String, _ desc: String, _ icon: String) -> some View {

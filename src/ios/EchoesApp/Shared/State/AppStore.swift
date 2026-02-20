@@ -2,31 +2,8 @@ import Foundation
 
 @MainActor
 final class AppStore: ObservableObject {
-    enum ModalRoute: Identifiable, Hashable {
-        case dropSuccess(String)
-        case echoContent(UUID)
-        case passcode(UUID)
-        case timeLock(UUID)
-        case sosComplete(String)
-        case recoveryKey
-        case proSubscription
-
-        var id: String {
-            switch self {
-            case .dropSuccess(let title): return "dropSuccess-\(title)"
-            case .echoContent(let id): return "echo-\(id.uuidString)"
-            case .passcode(let id): return "passcode-\(id.uuidString)"
-            case .timeLock(let id): return "timeLock-\(id.uuidString)"
-            case .sosComplete(let key): return "sos-\(key)"
-            case .recoveryKey: return "recovery"
-            case .proSubscription: return "pro"
-            }
-        }
-    }
-
     enum FullScreenRoute: Identifiable {
         case blackBox
-
         var id: String { "blackBox" }
     }
 
@@ -34,8 +11,8 @@ final class AppStore: ObservableObject {
     @Published var selectedTab: AppTab = .map
     @Published var permissionStep: PermissionStep = .location
     @Published var grantedPermissions: Set<PermissionStep> = []
-    @Published var modalRoute: ModalRoute?
     @Published var fullScreenRoute: FullScreenRoute?
+    @Published var sosCompletionKey: String?
     @Published var dropDraft = DropDraft()
     @Published var echoes: [EchoItem] = []
     @Published var footprints: [FootprintItem] = []
@@ -61,7 +38,6 @@ final class AppStore: ObservableObject {
         self.subscriptionRepository = subscriptionRepository
         refresh()
 
-        // Developer-only launch flag for simulator verification paths.
         if ProcessInfo.processInfo.arguments.contains("--force-main-shell") {
             grantedPermissions = Set(PermissionStep.allCases)
             phase = .main
@@ -99,31 +75,8 @@ final class AppStore: ObservableObject {
     func submitDrop() {
         echoRepository.addEcho(from: dropDraft)
         Haptics.success()
-        modalRoute = .dropSuccess(dropDraft.title)
         dropDraft = DropDraft()
         refresh()
-        selectedTab = .map
-    }
-
-    func tapEcho(_ echo: EchoItem) {
-        if echo.isTimeLocked {
-            modalRoute = .timeLock(echo.id)
-            return
-        }
-        if echo.visibility == .private {
-            modalRoute = .passcode(echo.id)
-            return
-        }
-        modalRoute = .echoContent(echo.id)
-    }
-
-    func validatePasscode(_ passcode: String, for id: UUID) -> Bool {
-        guard let echo = echoRepository.find(id: id), echo.passcode == passcode else {
-            Haptics.error()
-            return false
-        }
-        modalRoute = .echoContent(id)
-        return true
     }
 
     func markWitnessed(_ id: UUID) {
@@ -148,7 +101,7 @@ final class AppStore: ObservableObject {
     func completeSOS() {
         fullScreenRoute = nil
         guard let completed = sosRepository.finish() else { return }
-        modalRoute = .sosComplete(completed.recoveryKey)
+        sosCompletionKey = completed.recoveryKey
         currentSOS = nil
         Haptics.success()
     }
@@ -164,7 +117,6 @@ final class AppStore: ObservableObject {
         case "drop": selectedTab = .drop
         case "pickup": selectedTab = .pickup
         case "sos": startSOS()
-        case "pro": modalRoute = .proSubscription
         default: break
         }
     }

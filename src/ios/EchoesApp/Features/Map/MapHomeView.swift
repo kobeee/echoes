@@ -90,8 +90,7 @@ struct MapHomeView: View {
 
     private var discoveryCard: some View {
         Button {
-            guard let target = store.nearbyEchoes.first else { return }
-            store.tapEcho(target)
+            store.selectedTab = .pickup
         } label: {
             HStack(spacing: EchoesSpacing.sm) {
                 Text("♪")

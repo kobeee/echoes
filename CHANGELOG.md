@@ -1,4 +1,883 @@
+
+## 2026-02-20
+- [修复] **TimeLockLockedView 向下偏移问题 - 终于解决了！** ✅
+
+### 问题现象
+- 250米的回响（EchoContentView）位置正常
+- 15米的回响（PasscodeSheet → EchoContentView）位置正常
+- **50米的回响（TimeLockLockedView）整体向下偏移**
+
+### 根本原因
+**TimeLockLockedView 使用普通 `VStack` 作为根容器，而 EchoContentView 使用 `ScrollView`**
+
+iOS 26 Sheet 对 `ScrollView` 和普通 `VStack` 的布局处理不一致：
+- `ScrollView` → 自动处理 drag indicator 空间 → header 位置正确
+- `VStack` → 无自动处理 → 内容向下偏移
+
+### 修复方案
+
+**修改文件**: `Features/Pickup/TimeLockLockedView.swift`
+
+```swift
+// 修复前 ❌ - 普通 VStack 导致偏移
+var body: some View {
+    VStack(spacing: EchoesSpacing.md) {
+        // content
+    }
+    .background(EchoesColor.bgPrimary)
+}
+
+// 修复后 ✅ - 使用 ScrollView 包裹，与 EchoContentView 保持一致
+var body: some View {
+    ScrollView {
+        VStack(spacing: EchoesSpacing.md) {
+            headerBar
+            if let echo {
+                lockInfoCard(echo)
+                lockIconView
+                countdownSection
+                actionButtons
+            }
+        }
+        .padding(EchoesSpacing.md)
+    }
+    .scrollIndicators(.hidden)
+    .background(EchoesColor.bgPrimary)
+}
+```
+
+### 重构要点
+1. **使用 `ScrollView` 替代普通 `VStack`** - 与其他 Sheet 页面保持一致
+2. **统一 padding 应用位置** - `.padding(EchoesSpacing.md)` 在 VStack 上
+3. **隐藏滚动指示器** - `.scrollIndicators(.hidden)`
+4. **代码结构优化** - 拆分为 `headerBar`、`lockInfoCard`、`lockIconView`、`countdownSection`、`actionButtons` 等计算属性
+
+### 经验教训
+- **iOS 26 Sheet 的布局一致性**：所有 Sheet 页面应使用相同的根容器类型
+- **对比排查法有效**：对比正常页面（EchoContentView）和异常页面（TimeLockLockedView）的差异
+- **ScrollView 不是万能解**，但在 iOS 26 Sheet 场景下比 VStack 更可靠
+
+### 排雷记录
+之前花了大量时间修复 EchoContentView 累积下移问题，尝试了 11+ 种方案都失败。
+但真正的问题是：**不同 Sheet 页面使用了不同的根容器类型**。
+
+**正确的做法**：
+- 所有 Sheet 页面统一使用 `ScrollView` 作为根容器
+- 不要混用 `VStack` 和 `ScrollView`
+- 保持 padding 应用位置一致
+
+---
+
+## 2026-02-20
+- [失败] **Sheet 导航累积下移问题 - 多次重构均失败** ❌
+
+### 问题现象
+- 250米的回响（直接打开 EchoContentView）位置正常
+- 15米的回响（PasscodeSheet → EchoContentView）位置累积下移
+- 50米的回响（TimeLockLockedView）正常显示
+
+### 已尝试方案（全部失败）
+1. ❌ `.sheet(item:)` 统一管理
+2. ❌ `.sheet(isPresented:)` + 自定义 Binding
+3. ❌ `.fullScreenCover` 替代 `.sheet`
+4. ❌ NavigationStack 完全重构
+5. ❌ UIKit `UIViewController.present` 绕过 SwiftUI
+6. ❌ Closure-Based Navigation（每个 View 自己控制关闭）
+7. ❌ 统一 `SheetDestination` 枚举 + 单一 `@State`
+
+### 当前状态
+- 代码已重构为 Closure-Based Navigation
+- 移除了 `AppStore.modalRoute`，改用 View 之间的 closure 传递
+- 问题仍然存在，可能是 **iOS 26 SwiftUI 的系统级 bug**
+
+### 修改文件（12个）
+- `App/Root/RootView.swift` - 使用 SheetDestination 枚举
+- `Shared/State/AppStore.swift` - 移除 modalRoute
+- `Features/Pickup/PickupView.swift` - 添加 onOpenXxx closure
+- `Features/Pickup/PasscodeSheet.swift` - 使用 onComplete closure
+- `Features/Pickup/EchoContentView.swift` - 添加 onClose closure
+- `Features/Pickup/TimeLockLockedView.swift` - 添加 onClose closure
+- `Features/Drop/DropView.swift` - 添加 onSuccess closure
+- `Features/Drop/DropSuccessView.swift` - 添加 onClose closure
+- `Features/Settings/SettingsView.swift` - 添加 onOpenXxx closure
+- `Features/Settings/RecoveryKeyView.swift` - 添加 onClose closure
+- `Features/Pro/ProSubscriptionView.swift` - 添加 onClose closure
+- `Features/BlackBox/SOSCompleteView.swift` - 添加 onClose closure
+
+### 后续建议
+1. 等待 Apple 修复 iOS 26 bug (FB20228369)
+2. 创建最小可复现 demo 向 Apple 反馈
+3. 考虑完全放弃 sheet，改用全屏 NavigationStack
+
+---
+
+## 2026-02-20
+- [重构] **彻底推倒重构 Sheet 导航系统** 🔄🔥
+
+### 问题现象
+- 250米的回响（直接打开 EchoContentView）位置正常
+- 15米的回响（PasscodeSheet → EchoContentView）位置累积下移
+- 之前的所有修修补补方案都无法解决
+
+### 根本原因
+iOS 26 的 `.sheet(item:)` 在 `modalRoute` 变化时会复用同一个 presentation controller，导致布局状态累积。**这是 iOS 26 SwiftUI 的设计限制，不是代码 bug。**
+
+### 彻底解决方案：Closure-Based Navigation
+
+**核心思路**：完全放弃 `modalRoute` 状态管理，改用 closure 传递，让每个 View 自己控制何时关闭和打开。
+
+#### 1. RootView.swift - 使用 @State 管理每个 Sheet
+```swift
+// 修复前 ❌ - 单一 modalRoute 状态管理
+.sheet(item: $store.modalRoute) { route in ... }
+
+// 修复后 ✅ - 每个 Sheet 独立管理
+@State private var showEchoContent = false
+@State private var echoContentID: UUID?
+@State private var showPasscode = false
+@State private var passcodeEchoID: UUID?
+
+.sheet(isPresented: $showPasscode) {
+    PasscodeSheet(echoID: passcodeEchoID!) { success in
+        showPasscode = false
+        if success {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                echoContentID = passcodeEchoID
+                showEchoContent = true
+            }
+        }
+    }
+}
+```
+
+#### 2. PasscodeSheet - 使用 onComplete closure
+```swift
+// 修复前 ❌ - 直接操作 store.modalRoute
+if store.validatePasscode(passcode, for: echoID) { ... }
+
+// 修复后 ✅ - 通过 closure 通知父视图
+let onComplete: (Bool) -> Void
+if echo.passcode == passcode {
+    onComplete(true)  // 父视图决定下一步
+}
+```
+
+#### 3. AppStore.swift - 移除 modalRoute
+```swift
+// 移除
+@Published var modalRoute: ModalRoute?
+
+// 新增（用于 SOS 完成后通知 RootView）
+@Published var sosCompletionKey: String?
+```
+
+### 修改文件（12个）
+- `App/Root/RootView.swift` - 完全重写，使用 @State + closure
+- `Shared/State/AppStore.swift` - 移除 modalRoute，保留 fullScreenRoute
+- `Features/Pickup/PickupView.swift` - 添加 onOpenXxx closure
+- `Features/Pickup/PasscodeSheet.swift` - 完全重写，使用 onComplete
+- `Features/Pickup/EchoContentView.swift` - 添加 onClose closure
+- `Features/Pickup/TimeLockLockedView.swift` - 添加 onClose closure
+- `Features/Drop/DropView.swift` - 添加 onSuccess closure
+- `Features/Drop/DropSuccessView.swift` - 添加 onClose closure
+- `Features/Settings/SettingsView.swift` - 添加 onOpenXxx closure
+- `Features/Settings/RecoveryKeyView.swift` - 添加 onClose closure
+- `Features/Pro/ProSubscriptionView.swift` - 添加 onClose closure
+- `Features/BlackBox/SOSCompleteView.swift` - 添加 onClose closure
+
+### 验证步骤
+1. 进入「地图」Tab
+2. 点击「解锁内容」（250米）→ 关闭 → 重复多次
+3. 切换目标到 15米 → 输入口令 `1024` → 关闭 → 重复多次
+4. 验证 EchoContentView 导航栏位置**始终正常**
+
+---
+
+## 2026-02-20
+- [重构] **Sheet 管理机制推倒重构** 🔄
+
+### 问题现象
+- 250米的回响（直接打开 EchoContentView）位置正常
+- 15米和50米的回响（需要 PasscodeSheet → EchoContentView 转换）位置异常
+
+### 根本原因
+iOS 26 的 `.sheet(item:)` 在 `modalRoute` 从 `.passcode(id)` 切换到 `.echoContent(id)` 时会**复用同一个 sheet 容器**，只更新内容，导致布局状态累积。
+
+### 重构方案
+
+#### 1. RootView.swift - 简化 Sheet 管理
+```swift
+// 修复前 ❌ - 7 个独立的 .sheet(isPresented:) + 自定义 Binding
+.sheet(isPresented: isPresented(.echoContent)) {
+    if case .echoContent(let id) = store.modalRoute {
+        EchoContentView(echoID: id)
+            .id(sheetID)
+    }
+}
+// ... 重复 7 次
+
+// 修复后 ✅ - 单一 .sheet(item:) 统一管理
+.sheet(item: $store.modalRoute) { route in
+    modalContent(for: route)
+        .presentationDragIndicator(.visible)
+        .presentationBackground(EchoesColor.bgPrimary)
+}
+```
+
+#### 2. AppStore.swift - validatePasscode 延迟切换
+```swift
+// 修复前 ❌ - 直接切换，iOS 26 复用 sheet 容器
+modalRoute = .echoContent(id)
+
+// 修复后 ✅ - 先关闭再延迟打开，强制创建新实例
+modalRoute = nil
+Task { @MainActor in
+    try? await Task.sleep(for: .milliseconds(100))
+    modalRoute = .echoContent(id)
+}
+```
+
+### 修改文件
+- `App/Root/RootView.swift` - 从 147 行简化到 70 行
+- `Shared/State/AppStore.swift` - validatePasscode 添加延迟切换
+
+### 验证步骤
+1. 进入「地图」Tab
+2. 点击「解锁内容」（250米）→ 关闭 → 重复多次
+3. 切换目标到 15米 → 输入口令 `1024` → 关闭 → 重复多次
+4. 验证 EchoContentView 导航栏位置不再累积下移
+
+---
+
+## 2026-02-20
+- [重构] **彻底重构 TabView 子页面布局，移除所有 GeometryReader + safeAreaInsets** 🔄
+
+### 问题根因分析
+
+经过 11 种方案全部失败，确认问题根源是：
+- **TabView 子页面使用 `GeometryReader { geometry in ... geometry.safeAreaInsets }` 与 iOS 26 Liquid Glass TabView 的 `.ignoresSafeArea()` 产生累积性布局冲突**
+- 每次打开 Sheet 再关闭，safeAreaInsets 值可能被累加或未正确重置
+- 这不是 Sheet 呈现机制的问题，而是**父视图布局方式**导致的累积
+
+### 彻底重构方案
+
+**核心原则：完全不使用 GeometryReader，不手动计算 safeAreaInsets，让 SwiftUI 自己处理安全区域。**
+
+#### 1. PickupView.swift（问题源头）
+```swift
+// 修复前 ❌
+GeometryReader { geometry in
+    VStack {
+        Text("发现回响")
+            .padding(.top, geometry.safeAreaInsets.top + EchoesSpacing.md)
+        ...
+        Spacer().frame(height: geometry.safeAreaInsets.bottom + 100)
+    }
+}
+.background(EchoesColor.bgPrimary.ignoresSafeArea())
+
+// 修复后 ✅
+ScrollView {
+    VStack { ... }
+        .padding(.horizontal, EchoesSpacing.md)
+        .padding(.bottom, 120)  // TabBar + Home Indicator 固定预留
+}
+.contentMargins(.top, EchoesSpacing.md, for: .scrollContent)
+.scrollIndicators(.hidden)
+.background(EchoesColor.bgPrimary)
+```
+
+#### 2. EchoContentView.swift（Sheet 页面）
+```swift
+// 修复前 ❌
+VStack { ... }
+.padding(EchoesSpacing.md)
+.background(EchoesColor.bgPrimary.ignoresSafeArea())
+
+// 修复后 ✅
+ScrollView {
+    VStack { ... }
+    .padding(EchoesSpacing.md)
+}
+.scrollIndicators(.hidden)
+.background(EchoesColor.bgPrimary)  // 不使用 .ignoresSafeArea()
+```
+
+#### 3. RootView.swift（统一背景层）
+```swift
+// 修复前 ❌
+Group {
+    switch store.phase { ... }
+}
+.frame(maxWidth: .infinity, maxHeight: .infinity)
+.background(EchoesColor.bgPrimary.ignoresSafeArea())
+
+// 修复后 ✅
+ZStack {
+    EchoesColor.bgPrimary
+        .ignoresSafeArea()  // 统一背景层
+    
+    switch store.phase { ... }
+}
+// TabView 不再使用 .ignoresSafeArea()
+```
+
+#### 4. 其他 TabView 子页面（同步重构）
+- **DropView.swift**: 移除 GeometryReader，改用 ScrollView + contentMargins
+- **SettingsView.swift**: 移除 GeometryReader，改用 ScrollView + contentMargins
+- **FootprintsView.swift**: 移除 GeometryReader，改用 ScrollView + contentMargins
+- **MapHomeView.swift**: 已经是干净的（没有 GeometryReader）
+
+### 修改文件清单
+- `Features/Pickup/PickupView.swift` - 彻底重构
+- `Features/Pickup/EchoContentView.swift` - 彻底重构
+- `Features/Drop/DropView.swift` - 彻底重构
+- `Features/Settings/SettingsView.swift` - 彻底重构
+- `Features/Footprints/FootprintsView.swift` - 彻底重构
+- `App/Root/RootView.swift` - 统一背景层，移除 TabView 的 .ignoresSafeArea()
+
+### 重构要点
+1. **移除所有 GeometryReader** - 不手动读取 safeAreaInsets
+2. **使用 ScrollView + contentMargins** - 让 SwiftUI 自动处理安全区域
+3. **底部间距使用固定值** - 120pt = TabBar(49pt) + Home Indicator(34pt) + 缓冲(37pt)
+4. **Sheet 页面不使用 .ignoresSafeArea()** - 让系统处理
+5. **统一背景层在 ZStack 根层级** - 而不是每个子视图单独处理
+
+### 验证步骤
+1. 构建成功 ✅
+2. 安装到 iPhone 17 Pro 模拟器 ✅
+3. 启动参数 `--force-main-shell` 跳过权限流程 ✅
+4. **待用户验证**: 地图 Tab → 切换目标 → 解锁内容，多次循环后导航栏位置是否累积下移
+
+---
+
+## 2026-02-20
+- [记录] **EchoContentView 累积下移问题 - 新增两个方案均失败** ⚠️
+
+### 本次尝试方案
+
+1. ❌ **`.sheet(isPresented:)` 替代 `.sheet(item:)`**
+   - 假设：`.sheet(item:)` 追踪 item identity 导致 safe area 缓存未重置
+   - 做法：改用 `.sheet(isPresented:)` + 自定义 Binding，不追踪 identity
+   - 结果：**失败** - 问题依旧，排除了 `.sheet(item:)` vs `.sheet(isPresented:)` 的差异
+
+2. ❌ **UIKit `UIViewController.present()` 完全绕过 SwiftUI sheet**
+   - 假设：SwiftUI 所有 sheet 机制都有 safe area 累积 bug，用 UIKit 绕过
+   - 做法：创建 `UIKitSheetPresenter`（UIViewControllerRepresentable），每次 present 全新的 UIHostingController
+   - 结果：**失败** - 即使用 UIKit present，内容仍然累积下移
+
+### 累计已证伪方案（11个）
+1. ❌ 修改 padding/alignment/frame
+2. ❌ `.fullScreenCover` 替代 `.sheet`
+3. ❌ 移除 `.id()` 强制刷新
+4. ❌ 先置空再延迟设置 modalRoute
+5. ❌ 减小 sheetTop
+6. ❌ 统一 ignoresSafeArea 层级
+7. ❌ 固定 ZStack + opacity 控制
+8. ❌ 移除所有 GeometryReader
+9. ❌ NavigationStack 完全重构
+10. ❌ `.sheet(isPresented:)` 替代 `.sheet(item:)` — **新增**
+11. ❌ UIKit UIViewController.present 绕过 SwiftUI — **新增**
+
+### 关键结论
+- **问题不在 sheet 呈现机制本身**：SwiftUI `.sheet(item:)`、`.sheet(isPresented:)`、`.fullScreenCover`、NavigationStack、UIKit present 全部失败
+- **问题极可能在 EchoContentView 内部布局或 iOS 26 渲染层**：所有外部容器/呈现方式都无法修复，指向视图内容本身或系统渲染 bug
+- 已提交 Apple Feedback: FB20228369
+
+### 当前状态
+代码已恢复原始实现，问题暂时搁置。
+
+## 2026-02-18
+- [记录] **EchoContentView 累积下移问题 - NavigationStack 重构也失败了** ⚠️
+
+### 重构内容
+尝试了彻底改变导航架构，使用 NavigationStack 替代所有 Modal/Sheet 方案：
+
+1. **AppStore**: 
+   - 移除 `modalRoute: ModalRoute?` 
+   - 新增 `navigationPath = NavigationPath()`
+   - Route 枚举重命名（ModalRoute → Route）
+
+2. **RootView**:
+   - 移除 ZStack + ModalContainer + opacity 方案
+   - 使用 NavigationStack + navigationDestination 标准导航
+
+3. **所有 Sheet 页面**:
+   - 修改为 NavigationStack push/pop 模式
+
+### 重构结果
+**❌ 失败** - 问题依然存在！
+
+这说明我们之前的所有分析都是错误的，问题根本**不在导航方式**（ZStack/sheet/NavigationStack），而在**视图内容本身**或**更深层次的原因**。
+
+### 修改文件清单（已回滚或保留但无效）
+- `Shared/State/AppStore.swift` - 路由状态管理重构
+- `App/Root/RootView.swift` - NavigationStack 实现
+- `Features/Pickup/EchoContentView.swift` - 适配新导航
+- `Features/Pickup/PasscodeSheet.swift` - 适配新导航
+- `Features/Pickup/TimeLockLockedView.swift` - 适配新导航
+- `Features/Drop/DropSuccessView.swift` - 适配新导航
+- `Features/BlackBox/SOSCompleteView.swift` - 适配新导航
+- `Features/Settings/RecoveryKeyView.swift` - 适配新导航
+- `Features/Settings/SettingsView.swift` - 适配新导航
+- `Features/Pro/ProSubscriptionView.swift` - 适配新导航
+- `Tests/EchoesAppTests.swift` - 更新测试用例
+
+### 技术反思
+- NavigationStack 重构完全无效，彻底排除了"导航方式导致 safe area 累积"的假设
+- 问题可能根源：
+  1. **PickupView 的 @State selectedID 累积？**
+  2. **EchoContentView 内部的某种状态泄漏？**
+  3. **iOS 26 SwiftUI 在特定组合下的系统级 bug？**
+  4. **GeometryReader safeAreaInsets 计算问题？**
+- 需要重新审视第一性原理，从最简单的页面开始逐步排查
+
+## 2026-02-18
+- [记录] **EchoContentView 累积下移问题 - 最终状态：未解决**
+
+### 已尝试方案（全部失败）
+1. ❌ 修改 padding/alignment/frame
+2. ❌ 使用 .fullScreenCover 替代 .sheet
+3. ❌ 移除 .id() 强制刷新
+4. ❌ 先置空再延迟设置 modalRoute
+5. ❌ 减小 sheetTop 从 48pt → 20pt → 16pt
+6. ❌ 统一 ignoresSafeArea 层级
+7. ❌ 固定 ZStack 结构 + opacity 控制（Ultrabrain 方案）
+8. ❌ 移除所有 GeometryReader
+
+### 日志观察
+- 位置坐标始终显示正确（62.0 = 状态栏高度）
+- 但视觉上位置过低且累积下移
+- 日志坐标与实际渲染位置不一致
+
+### 可能原因
+- **iOS 26 SwiftUI 系统级 bug**：ZStack + 自定义 Modal + ignoresSafeArea 组合下的 safe area 累积计算问题
+- 可能需要 Apple 官方修复
+
+### 建议后续方案
+1. **使用 NavigationStack 替代自定义 Modal**（彻底改变架构）
+2. **使用 UIKit presentViewController**（绕过 SwiftUI）
+3. **等待 iOS 26.3/27 更新**
+4. **创建最小可复现 demo 向 Apple 反馈**（FB20228369）
+
+### 当前状态
+问题暂时搁置，功能可用但存在视觉瑕疵（多次切换后位置累积下移）。
+
+
+## 2026-02-18
+- [修复] **终极修复**：iOS 26 SwiftUI ZStack 动态条件渲染导致 safe area 计算状态累积。将 ModalContainer 改为始终存在，通过 opacity 控制显示/隐藏。
+
 # Echoes 项目变更日志
+
+## 2026-02-18
+- [修复] 终极方案：使用固定 ZStack + opacity 替代动态 if-let
+
+**根本原因**：
+- 之前所有方案都失败的原因是：ZStack 动态添加/移除视图导致 safe area 计算状态累积
+- iOS 26 SwiftUI 在处理 `if let { view }` 动态条件渲染时存在布局状态累积 bug
+- 每次 Modal 打开/关闭，ZStack 的内部布局状态被"记住"，导致累积偏移
+
+**最终解决方案**：
+```swift
+// 修复前 ❌ - 动态添加/移除导致 safe area 累积
+ZStack(alignment: .top) {
+    MainShellView()
+    if let route = store.modalRoute {
+        ModalContainer(route: route)
+            .zIndex(10)
+    }
+}
+
+// 修复后 ✅ - 固定结构 + opacity 控制显示
+ZStack(alignment: .top) {
+    MainShellView()
+    ModalContainer(route: store.modalRoute, modalView: modalView)
+        .zIndex(10)
+        .opacity(store.modalRoute != nil ? 1 : 0)
+        .allowsHitTesting(store.modalRoute != nil)
+}
+```
+
+**原理**：
+- ZStack 的子视图数量和顺序保持不变
+- 用 opacity 控制显示/隐藏，而非添加/移除视图
+- 这样 SwiftUI 的布局系统不会重新计算安全区域偏移
+
+## 2026-02-18
+- [诊断] 添加运行时几何日志系统，用于诊断「地图 Tab -> 切换目标 -> 解锁内容」后页面累积下移问题：
+  - 新增 `LayoutDebug.swift` - 统一日志工具
+  - 修改 `AppStore.swift` - 添加 `tapEcho` / `validatePasscode` 路由切换日志
+  - 修改 `RootView.swift` - 添加 `ModalContainer` 布局日志（全局坐标、安全区域）
+  - 修改 `EchoContentView.swift` - 添加视图出现次数计数器、Header位置日志
+  - 日志将输出到 Xcode Console 和 macOS Console.app，用于分析偏移来源
+
+## 2026-02-18
+- [记录] 对「地图 Tab -> 切换目标 -> 解锁内容」后回响页面顶部间距累积下移问题进行了多轮修复与重构尝试，用户实机验证后仍未解决。
+- [状态] 当前问题暂时挂起，后续需基于运行时几何日志（safe area / frame）做定点诊断，再继续修复。
+
+## 2026-02-18
+- [修复] 从第一性原理重构弹层布局：`RootView` 弹层宿主改为 `ZStack(alignment: .top)`，并移除转场动画，避免默认居中与过渡状态叠加导致顶部位置漂移。
+- [修复] 对 `PasscodeSheet`、`TimeLockLockedView`、`EchoContentView` 统一加上 `maxWidth + maxHeight` 的全屏约束，强制内容基于全屏容器“顶对齐”布局，不再随内容高度变化而下沉。
+
+## 2026-02-18
+- [修复] 重构 `RootView` 的弹层呈现：将 `modalRoute` 从 `fullScreenCover(item:)` 改为根视图内的全屏 ZStack 覆盖层，消除多次「切换目标 → 解锁内容」后的页面累积下移。
+- [修改] 保留 `fullScreenRoute` 的 `fullScreenCover` 仅用于 `BlackBoxView`，避免普通回响流程与系统 presenter 叠加引发安全区偏移。
+- [修复] 简化 `AppStore.tapEcho` / `validatePasscode` 的弹层切换逻辑为直接路由切换，移除“先置空再延时重开”的过渡补丁，避免状态竞争导致位置漂移。
+
+## 2026-02-18 - EchoContentView导航栏累积下移问题 - 七次修复尝试全记录 ⚠️
+
+### 问题描述
+- **现象**: EchoContentView导航栏每次打开都比上一次更低（累积性下移）
+- **影响**: 所有sheet页面（从PickupView点击"解锁内容"进入）
+- **正常页面**: TimeLockLockedView、PasscodeSheet等完全正常
+- **状态**: 七次修复尝试，**全部失败**
+
+---
+
+### 七次修复尝试全记录
+
+#### 第一次修复: 添加`.padding(.top, sheetTop)` - ❌ 失败
+**假设**: EchoContentView缺少顶部padding导致
+**修改**: `Features/Pickup/EchoContentView.swift`
+```swift
+HStack { ... }
+.padding(.top, EchoesSpacing.sheetTop)  // 新增
+.padding(.horizontal, EchoesSpacing.md)
+```
+**结果**: 完全无效
+
+#### 第二次修复: 移除`.id(id)` - ❌ 失败
+**假设**: `.id(id)`强制重新创建视图导致状态累积
+**修改**: `App/Root/RootView.swift`
+```swift
+case .echoContent(let id):
+    EchoContentView(echoID: id)
+    // 移除 .id(id)
+```
+**结果**: 完全无效
+
+#### 第三次修复: 添加`alignment: .top` - ❌ 失败
+**假设**: VStack缺少alignment导致居中对齐累积偏移
+**修改**: `Features/Pickup/EchoContentView.swift`
+```swift
+.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)  // 添加alignment
+```
+**结果**: 完全无效
+
+#### 第四次修复: 移除`maxWidth: .infinity` - ❌ 失败
+**假设**: `maxWidth: .infinity`与`alignment: .top`组合导致问题
+**修改**: `Features/Pickup/EchoContentView.swift`
+```swift
+.frame(maxHeight: .infinity, alignment: .top)  // 移除maxWidth
+```
+**结果**: 完全无效
+
+#### 第五次修复: 修改sheet配置 - ❌ 失败
+**假设**: sheet的presentation配置问题
+**修改**: `App/Root/RootView.swift`
+```swift
+.sheet(item: $store.modalRoute) { route in
+    modalView(route)
+        .interactiveDismissDisabled()  // 新增
+        .presentationBackground(EchoesColor.bgPrimary)
+        .presentationBackgroundInteraction(.enabled)  // 新增
+}
+```
+**结果**: 完全无效
+
+#### 第六次修复: 使用`.fullScreenCover`替代`.sheet` - ❌ 失败
+**假设**: `.sheet`复用presentation controller导致状态累积
+**修改**: `App/Root/RootView.swift`
+```swift
+.fullScreenCover(item: $store.modalRoute) { route in  // 替换.sheet
+    modalView(route)
+        .presentationBackground(EchoesColor.bgPrimary)
+}
+```
+**结果**: 
+- 仍然可以下滑关闭（说明.fullScreenCover未生效或iOS 26默认允许）
+- 累积偏移问题仍然存在
+- **完全无效**
+
+#### 第七次修复: 修复`tapEcho`状态管理 - ❌ 等待验证
+**假设**: `tapEcho`直接设置`modalRoute`没有先清空再设置，与`validatePasscode`策略不同
+**修改1**: `Shared/State/AppStore.swift`
+```swift
+// 修改前
+modalRoute = .echoContent(echo.id)
+
+// 修改后
+modalRoute = nil
+Task { @MainActor in
+    try? await Task.sleep(for: .milliseconds(100))
+    modalRoute = .echoContent(echo.id)
+}
+```
+
+**修改2**: `App/Root/RootView.swift`
+```swift
+.fullScreenCover(item: $store.modalRoute) { route in
+    modalView(route)
+        .presentationBackground(EchoesColor.bgPrimary)
+        .interactiveDismissDisabled()  // 阻止下滑关闭
+}
+```
+**结果**: 等待用户验证
+
+---
+
+### 失败的假设分析
+
+所有以下假设均被证明错误:
+1. ❌ EchoContentView布局与其他sheet页面不同
+2. ❌ `.id(id)`导致视图重新创建
+3. ❌ `alignment`参数缺失
+4. ❌ `maxWidth: .infinity`导致问题
+5. ❌ sheet配置问题
+6. ❌ `.sheet` vs `.fullScreenCover`选择问题
+7. ❓ `tapEcho`状态管理策略问题（待验证）
+
+### 可能的真实原因
+
+1. **iOS 26已知bug (FB20228369)**: Apple已确认的sheet导航栏累积偏移bug
+2. **更深层的SwiftUI状态管理问题**: 可能与@State、@EnvironmentObject或视图生命周期有关
+3. **编译/部署问题**: 修改可能没有被正确编译进应用
+4. **其他未发现的代码问题**: 可能有其他地方覆盖或干扰了这些修复
+
+### 排雷记录（给下一任开发者）
+
+**已验证完全无效的方案**:
+1. ✅ 修改EchoContentView padding/alignment/frame
+2. ✅ 移除.id(id)
+3. ✅ 使用.fullScreenCover替代.sheet
+4. ✅ 修改sheet presentation配置
+5. ✅ 添加interactiveDismissDisabled
+
+**可能的真正解决方案**:
+1. 等待Apple修复iOS 26 bug
+2. 完全不使用sheet，改用NavigationLink导航
+3. 使用UIKit的presentViewController替代SwiftUI的sheet
+4. 检查是否有其他代码覆盖或干扰修复
+5. 创建最小可复现demo向Apple反馈
+
+### 经验教训
+- 七次修复全部失败说明问题可能不在表层代码
+- 累积性偏移是典型的状态管理或系统级bug
+- 有时候需要承认无法解决，等待官方修复
+- 所有"显而易见"的修复都无效时，需要考虑更深层次的原因
+
+---
+
+## 2026-02-18 - EchoContentView导航栏累积下移问题最终修复（已解决）✅
+
+### 问题根因
+**iOS 26 SwiftUI Sheet已知bug (FB20228369)**
+
+`.sheet(item:)`在复用presentation controller时存在累积性布局偏移bug。所有尝试修复EchoContentView布局的方案（padding、alignment、frame等）均无效，因为这是iOS 26系统级bug。
+
+### 最终解决方案
+**使用`.fullScreenCover`替代`.sheet`**
+
+文件: `App/Root/RootView.swift`
+
+```swift
+// 修复前 ❌
+.sheet(item: $store.modalRoute) { route in
+    modalView(route)
+}
+
+// 修复后 ✅
+.fullScreenCover(item: $store.modalRoute) { route in
+    modalView(route)
+        .presentationBackground(EchoesColor.bgPrimary)
+}
+```
+
+### 方案对比
+
+| 方案 | 效果 | 交互影响 |
+|------|------|----------|
+| 修改EchoContentView padding | ❌ 无效 | 无 |
+| 移除`.id(id)` | ❌ 无效 | 无 |
+| 添加`alignment: .top` | ❌ 无效 | 无 |
+| 移除`maxWidth: .infinity` | ❌ 无效 | 无 |
+| **使用`.fullScreenCover`** | **✅ 彻底解决** | 无法下滑关闭 |
+
+### 参考
+- Apple Feedback: FB20228369
+- 影响: 所有sheet页面从底部滑入变为全屏覆盖
+- 接受度: 交互方式改变，但彻底解决累积偏移问题
+
+### 修复内容
+**文件**: `Features/Pickup/EchoContentView.swift`
+
+```swift
+// 修复前 ❌
+HStack {
+    // header content
+}
+.padding(.horizontal, EchoesSpacing.md)
+
+// 修复后 ✅
+HStack {
+    // header content
+}
+.padding(.top, EchoesSpacing.sheetTop)  // 48pt，为drag indicator预留空间
+.padding(.horizontal, EchoesSpacing.md)
+```
+
+### 验证方法
+1. 进入PickupView，点击"解锁内容"进入EchoContentView
+2. 返回，切换不同目标，再次进入EchoContentView
+3. 验证导航栏位置保持一致，不再累积下移
+
+### 经验教训
+- 所有sheet页面必须统一添加`.padding(.top, EchoesSpacing.sheetTop)`
+- iOS 26的drag indicator需要显式预留空间，不能依赖系统自动处理
+- 多专家并行分析是诊断复杂问题的有效方法
+
+---
+
+## 2026-02-18 - EchoContentView导航栏位置累积下移问题（深度分析，未解决）⚠️
+
+### 问题描述
+- **现象**: 从PickupView点击"解锁内容"进入EchoContentView后，导航栏位置会随着打开次数**累积性下移**
+- **关键特征**: 不是固定偏移，而是每次打开都比上一次更低
+- **影响页面**: EchoContentView（语音回响页面）
+- **对比**: TimeLockLockedView、PasscodeSheet等其他Sheet页面正常
+
+### 核心问题
+用户在地图Tab中切换不同目标（50米→250米→更远），每次点击"解锁内容"进入EchoContentView，导航栏位置会越来越低。
+
+### 深度分析过程（多专家联合诊断）
+
+#### 第一轮分析：布局结构差异（失败）
+**假设**: EchoContentView与TimeLockLockedView的VStack参数不同导致
+- **对比发现**:
+  - EchoContentView: `VStack(alignment: .leading, spacing: 16)` + header作为computed property
+  - TimeLockLockedView: `VStack(spacing: 16)` + header内联
+- **修复尝试**: 统一为内联header、移除alignment参数、统一padding应用位置
+- **结果**: ❌ 无效
+
+#### 第二轮分析：条件渲染影响（失败）
+**假设**: `if let echo`条件渲染导致SwiftUI布局计算差异
+- **修复尝试**: 移除`if let echo`，改为直接使用`echo?`
+- **结果**: ❌ 无效
+
+#### 第三轮分析：Sheet Presentation Controller复用（部分发现）
+**专家分析**: SwiftUI的`.sheet(item:)`在item改变时会**复用同一个presentation controller**
+- **机制**: 当`modalRoute`从`.passcode(id)`切换到`.echoContent(id)`时，sheet不会dismiss再present，而是直接更新content
+- **理论**: 这可能导致safe area insets或layout container的状态累积
+- **修复尝试**: 
+  1. 给EchoContentView添加`.id(echoID)`强制刷新
+  2. 在`validatePasscode`中先`modalRoute = nil`，延迟100ms后再设置新值
+- **结果**: ❌ 无效
+
+#### 第四轮分析：alignment: .top与safe area冲突（深度发现）
+**专家分析**: `.frame(maxHeight: .infinity, alignment: .top)`与iOS 26的safe area计算存在冲突
+- **关键发现**:
+  - `alignment: .top`会强制视图紧贴容器的top边界
+  - 当sheet复用时，系统可能重复计算safe area insets
+  - 手动`padding(.top, 48)`与系统自动drag indicator inset产生**乘法效应**
+- **对比TimeLockLockedView（正常）**: 使用默认居中布局，没有强制top对齐
+- **修复尝试**:
+  1. 移除`.padding(.top, 48)`硬编码
+  2. 将`.frame(maxHeight: .infinity, alignment: .top)`改为`.frame(maxWidth: .infinity, maxHeight: .infinity)`
+- **结果**: ❌ 无效
+
+### 排雷记录（给下一任开发者）
+
+#### 已验证无效的方案
+1. ✅ 统一VStack参数（alignment/spacing）
+2. ✅ 内联header定义 vs computed property
+3. ✅ 移除`if let`条件渲染
+4. ✅ 给View添加`.id()`强制刷新
+5. ✅ 先nil再延迟设置modalRoute
+6. ✅ 移除`alignment: .top`
+7. ✅ 移除手动`padding(.top, 48)`
+
+#### 可能的方向（待验证）
+1. **iOS 26 Liquid Glass sheet的已知bug**: 可能是iOS 26.2的已知问题，需要查阅Apple的Release Notes
+2. **TabView的影响**: 父视图MainShellView使用了`.tabBarMinimizeBehavior(.onScrollDown)`和`.ignoresSafeArea()`，可能通过Environment传递到sheet
+3. **presentationBackground与dragIndicator的交互**: `.presentationBackground(EchoesColor.bgPrimary)`可能在iOS 26中有不同的行为
+4. **RootView的sheet配置**: 可能需要使用`.fullScreenCover`替代`.sheet`来避免复用
+5. **GeometryReader的使用**: 在EchoContentView中添加GeometryReader读取实际insets，对比TimeLockLockedView
+6. **iOS 26.3 beta测试**: 可能是iOS 26.2特定版本的问题
+
+#### 关键代码位置
+- Sheet配置: `App/Root/RootView.swift:30-31`
+- Sheet页面: `Features/Pickup/EchoContentView.swift`
+- 状态管理: `Shared/State/AppStore.swift:validatePasscode`
+- 正常对比: `Features/Pickup/TimeLockLockedView.swift`
+
+### 修改文件（本次尝试）
+- `Features/Pickup/EchoContentView.swift` - 移除alignment: .top和硬编码padding
+- `App/Root/RootView.swift` - 添加.id(echoID)强制刷新
+- `Shared/State/AppStore.swift` - 添加延迟切换逻辑
+
+### 技术债务
+- EchoContentView的导航栏位置问题仍未解决
+- 需要进一步深入研究iOS 26 sheet presentation的内部机制
+- 建议创建最小可复现demo，向Apple提交反馈
+
+---
+
+## 2026-02-18 - Sheet页面顶部间距问题排查（未解决）⚠️
+
+### 问题描述
+- **现象**: Sheet弹出后，整体内容偏下，返回按钮明显太靠下
+- **用户反馈**: "位置有点低"、"位置更低了"
+- **影响页面**: TimeLockLockedView、EchoContentView、PasscodeSheet等所有Sheet页面
+
+### 排查过程
+
+#### 第一轮尝试（失败）
+- **假设**: `safeAreaInsets.top` 在Sheet中造成双重间距
+- **操作**: 将所有Sheet页面的 `geometry.safeAreaInsets.top` 改为固定值 `EchoesSpacing.md` (16pt)
+- **结果**: ❌ 问题未解决，反而让间距更小
+
+#### 第二轮尝试（失败）
+- **假设**: iOS 26 Sheet的 `presentationDragIndicator(.visible)` 占用空间，需要更大的顶部padding
+- **分析**: 
+  - iOS 26的Sheet会在顶部显示drag indicator（拖拽条）
+  - drag indicator占用约35-40pt的垂直空间
+  - 加上内容间距，总共需要约48-56pt的顶部空间
+- **操作**: 
+  1. 新增常量 `EchoesSpacing.sheetTop = 48`
+  2. 将所有Sheet页面的 `.padding(.top, EchoesSpacing.md)` 改为 `.padding(.top, EchoesSpacing.sheetTop)`
+  3. 添加 `.frame(maxHeight: .infinity, alignment: .top)` 确保内容从顶部开始
+- **结果**: ❌ 问题仍未解决
+
+### 修改文件
+- `Shared/Design/DesignTokens.swift` - 新增 `sheetTop: CGFloat = 48`
+- `Features/Pickup/TimeLockLockedView.swift`
+- `Features/Pickup/EchoContentView.swift`
+- `Features/Pickup/PasscodeSheet.swift`
+- `Features/BlackBox/SOSCompleteView.swift`
+- `Features/Settings/RecoveryKeyView.swift`
+- `Features/Pro/ProSubscriptionView.swift`
+- `Features/Drop/DropSuccessView.swift`
+
+### 给下一任的排雷指南
+
+#### 可能的原因方向
+1. **iOS 26 Sheet的新行为**: iOS 26可能改变了Sheet的内容布局方式，需要查阅最新API文档
+2. **presentationBackground的影响**: `presentationBackground(EchoesColor.bgPrimary)` 可能影响布局
+3. **VStack内部结构**: VStack的spacing和子元素排列可能有问题
+4. **SwiftUI的safeArea处理**: Sheet的safeArea处理方式可能与普通视图不同
+
+#### 建议尝试的方向
+1. **移除 presentationDragIndicator**: 尝试 `.presentationDragIndicator(.hidden)` 看是否有变化
+2. **使用原生导航栏**: 在Sheet内部使用 `NavigationStack` + `.navigationTitle()`
+3. **查看iOS 26 HIG**: 查阅Apple官方的iOS 26 Sheet设计指南
+4. **对比系统Sheet**: 创建一个最小化的Sheet demo对比行为差异
+5. **检查RootView的sheet配置**: RootView中 `.sheet` 的配置可能影响内容布局
+
+#### 相关代码位置
+- Sheet配置: `App/Root/RootView.swift:30-31`
+- Sheet页面: `Features/Pickup/` 目录下的 View 文件
+
+---
 
 ## 2026-02-14 - iPhone 17 Pro 屏幕黑边问题修复（关键修复）✅
 

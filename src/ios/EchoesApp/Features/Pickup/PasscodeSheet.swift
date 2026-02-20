@@ -3,6 +3,8 @@ import SwiftUI
 struct PasscodeSheet: View {
     @EnvironmentObject private var store: AppStore
     let echoID: UUID
+    let onComplete: (Bool) -> Void
+    
     @State private var digits: [Int] = []
     @State private var errorMessage: String?
 
@@ -10,7 +12,7 @@ struct PasscodeSheet: View {
         VStack(spacing: EchoesSpacing.md) {
             HStack {
                 Button {
-                    store.modalRoute = nil
+                    onComplete(false)
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(EchoesColor.textPrimary)
@@ -67,7 +69,7 @@ struct PasscodeSheet: View {
             .padding(.bottom, EchoesSpacing.md)
         }
         .padding(.horizontal, EchoesSpacing.md)
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .background(EchoesColor.bgPrimary)
     }
 
     private var keypad: some View {
@@ -107,10 +109,11 @@ struct PasscodeSheet: View {
         guard digits.count == 4 else { return }
 
         let passcode = digits.map(String.init).joined()
-        if store.validatePasscode(passcode, for: echoID) {
-            errorMessage = nil
-            digits = []
+        if let echo = store.echoes.first(where: { $0.id == echoID }),
+           echo.passcode == passcode {
+            onComplete(true)
         } else {
+            Haptics.error()
             errorMessage = "口令错误，请重试"
             digits = []
         }

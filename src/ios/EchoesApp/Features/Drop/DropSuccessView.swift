@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct DropSuccessView: View {
-    @EnvironmentObject private var store: AppStore
     let title: String
+    let onClose: () -> Void
 
     var body: some View {
         VStack(spacing: EchoesSpacing.lg) {
@@ -39,17 +39,16 @@ struct DropSuccessView: View {
             }
 
             SecondaryButton(title: "分享给朋友来寻宝") {
-                store.modalRoute = nil
+                onClose()
             }
 
             PrimaryButton(title: "返回地图") {
-                store.modalRoute = nil
-                store.selectedTab = .map
+                onClose()
             }
 
             Spacer()
         }
         .padding(EchoesSpacing.md)
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
+        .background(EchoesColor.bgPrimary)
     }
 }

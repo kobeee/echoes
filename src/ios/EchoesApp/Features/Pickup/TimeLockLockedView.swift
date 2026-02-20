@@ -3,82 +3,108 @@ import SwiftUI
 struct TimeLockLockedView: View {
     @EnvironmentObject private var store: AppStore
     let echoID: UUID
+    let onClose: () -> Void
 
     var body: some View {
-        VStack(spacing: EchoesSpacing.md) {
-            HStack {
-                Button {
-                    store.modalRoute = nil
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(EchoesColor.textPrimary)
+        ScrollView {
+            VStack(spacing: EchoesSpacing.md) {
+                headerBar
+                
+                if let echo {
+                    lockInfoCard(echo)
+                    lockIconView
+                    countdownSection
+                    actionButtons
                 }
-                Spacer()
-                Text("发现回响")
-                    .font(EchoesFont.headline)
+            }
+            .padding(EchoesSpacing.md)
+        }
+        .scrollIndicators(.hidden)
+        .background(EchoesColor.bgPrimary)
+    }
+    
+    private var headerBar: some View {
+        HStack {
+            Button {
+                onClose()
+            } label: {
+                Image(systemName: "chevron.left")
                     .foregroundStyle(EchoesColor.textPrimary)
-                Spacer()
-                Color.clear.frame(width: 20)
             }
-            .padding(.top, EchoesSpacing.md)
-            .padding(.horizontal, EchoesSpacing.md)
-
-            CardContainer {
-                HStack(spacing: EchoesSpacing.sm) {
-                    Image(systemName: "lock.fill")
+            .buttonStyle(.plain)
+            
+            Spacer()
+            
+            Text("发现回响")
+                .font(EchoesFont.headline)
+                .foregroundStyle(EchoesColor.textPrimary)
+            
+            Spacer()
+            
+            Color.clear.frame(width: 20)
+        }
+    }
+    
+    private func lockInfoCard(_ echo: EchoItem) -> some View {
+        CardContainer {
+            HStack(spacing: EchoesSpacing.sm) {
+                Image(systemName: "lock.fill")
+                    .foregroundStyle(EchoesColor.textPrimary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(echo.title)
+                        .font(EchoesFont.headline)
                         .foregroundStyle(EchoesColor.textPrimary)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("加密时间胶囊")
-                            .font(EchoesFont.headline)
-                            .foregroundStyle(EchoesColor.textPrimary)
-                        Text("来自匿名旅行者 · 2030年1月1日开锁")
-                            .font(EchoesFont.caption)
-                            .foregroundStyle(EchoesColor.textSecondary)
-                    }
+                    Text("来自匿名旅行者 · \(unlockDateText)开锁")
+                        .font(EchoesFont.caption)
+                        .foregroundStyle(EchoesColor.textSecondary)
                 }
             }
-            .padding(.horizontal, EchoesSpacing.md)
-
-            ZStack {
-                Circle()
-                    .fill(EchoesColor.gold.opacity(0.12))
-                    .frame(width: 110, height: 110)
-                Circle()
-                    .stroke(EchoesColor.gold, lineWidth: 1)
-                    .frame(width: 66, height: 66)
-                Image(systemName: "lock.fill")
-                    .foregroundStyle(EchoesColor.gold)
-            }
-            .padding(.top, EchoesSpacing.lg)
-
+        }
+    }
+    
+    private var lockIconView: some View {
+        ZStack {
+            Circle()
+                .fill(EchoesColor.gold.opacity(0.12))
+                .frame(width: 110, height: 110)
+            Circle()
+                .stroke(EchoesColor.gold, lineWidth: 1)
+                .frame(width: 66, height: 66)
+            Image(systemName: "lock.fill")
+                .foregroundStyle(EchoesColor.gold)
+        }
+        .padding(.top, EchoesSpacing.lg)
+    }
+    
+    private var countdownSection: some View {
+        VStack(spacing: EchoesSpacing.sm) {
             Text("距离开启还有")
                 .font(EchoesFont.subhead)
                 .foregroundStyle(EchoesColor.textSecondary)
-
+            
             Text("\(daysRemaining) 天")
                 .font(.system(size: 54, weight: .regular, design: .rounded))
                 .foregroundStyle(EchoesColor.gold)
-
+            
             Text("将于 \(unlockDateText) 开启")
                 .font(EchoesFont.subhead)
                 .foregroundStyle(EchoesColor.textSecondary)
-
+        }
+    }
+    
+    private var actionButtons: some View {
+        VStack(spacing: EchoesSpacing.md) {
             PrimaryButton(title: "⚙ 设置提醒") {
                 Haptics.success()
-                store.modalRoute = nil
+                onClose()
             }
-            .padding(.horizontal, EchoesSpacing.md)
-            .padding(.top, EchoesSpacing.md)
-
+            
             Button("返回地图") {
-                store.modalRoute = nil
+                onClose()
             }
             .font(EchoesFont.footnote)
             .foregroundStyle(EchoesColor.textSecondary)
-
-            Spacer()
         }
-        .background(EchoesColor.bgPrimary.ignoresSafeArea())
     }
 
     private var echo: EchoItem? {

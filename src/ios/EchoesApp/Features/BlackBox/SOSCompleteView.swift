@@ -1,15 +1,15 @@
 import SwiftUI
 
 struct SOSCompleteView: View {
-    @EnvironmentObject private var store: AppStore
     let recoveryKey: String
+    let onClose: () -> Void
 
     var body: some View {
         VStack(spacing: EchoesSpacing.md) {
             HStack {
                 Spacer()
                 Button {
-                    store.modalRoute = nil
+                    onClose()
                 } label: {
                     Image(systemName: "xmark")
                         .foregroundStyle(EchoesColor.textSecondary)
@@ -62,15 +62,14 @@ struct SOSCompleteView: View {
             )
 
             PrimaryButton(title: "知道了") {
-                store.modalRoute = nil
-                store.selectedTab = .map
+                onClose()
             }
             .padding(.top, EchoesSpacing.sm)
 
             Spacer()
         }
         .padding(EchoesSpacing.md)
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.black)
     }
 
     private var maskedKey: String {
